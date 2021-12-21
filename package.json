@@ -2,17 +2,21 @@
   "name": "setup-typescript-nodejs-eslint-prettier",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/server.ts",
+  "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn .",
     "build": "tsc",
-    "start": "node -r dotenv/config ./dist/server.js"
+    "dev": "ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn .",
+    "start": "npm run build && node -r dotenv/config ./dist/src/index.js",
+    "lint": "eslint ./src ./test --ext .ts,.js",
+    "lint:fix": "eslint ./src ./test --ext .ts,.js --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/module-alias": "^2.0.1",
+    "@types/node": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
     "babel-eslint": "^10.1.0",
@@ -29,6 +33,7 @@
   },
   "dependencies": {
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "module-alias": "^2.2.2"
   }
 }
