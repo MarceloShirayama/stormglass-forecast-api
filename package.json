@@ -10,6 +10,7 @@
     "lint": "eslint ./src ./test --ext .ts,.js",
     "lint:fix": "eslint ./src ./test --ext .ts,.js --fix",
     "test:functional": "jest --projects ./test --runInBand --detectOpenHandles",
+    "test:unit": "jest --watch --runInBand --detectOpenHandles",
     "style:check": "prettier --check './src/**/*.{ts,js}' './test/**/*.{ts,js}'",
     "style:fix": "prettier --write './src/**/*.{ts,js}' './test/**/*.{ts,js}'"
   },
@@ -41,6 +42,8 @@
   },
   "dependencies": {
     "@overnightjs/core": "^1.7.6",
+    "@types/axios": "^0.14.0",
+    "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "module-alias": "^2.2.2"

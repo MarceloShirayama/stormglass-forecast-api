@@ -1,7 +1,5 @@
-// import supertest from 'supertest'
-
-import { SetupServer } from '@src/server'
 import supertest from 'supertest'
+import { SetupServer } from '@src/server'
 
 let response: supertest.SuperTest<supertest.Test>
 
