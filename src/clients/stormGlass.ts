@@ -1,5 +1,5 @@
 import { InternalError } from '@src/util/errors/internal-error'
-import { AxiosStatic } from 'axios'
+import { AxiosError, AxiosStatic } from 'axios'
 
 export type StormGlassPointSource = {
   [key: string]: number
@@ -20,14 +20,6 @@ export type StormGlassForecastResponse = {
   hours: StormGlassPoint[]
 }
 
-export class ClientRequestError extends InternalError {
-  constructor(message: string) {
-    const internalMessage =
-      'Unexpected error when trying to communicate to StormGlass'
-    super(`${internalMessage}: ${message}`)
-  }
-}
-
 export type ForecastPoint = {
   swellDirection: number
   swellHeight: number
@@ -37,6 +29,22 @@ export type ForecastPoint = {
   waveHeight: number
   windDirection: number
   windSpeed: number
+}
+
+export class ClientRequestError extends InternalError {
+  constructor(message: string) {
+    const internalMessage =
+      'Unexpected error when trying to communicate to StormGlass'
+    super(`${internalMessage}: ${message}`)
+  }
+}
+
+export class StormGlassResponseError extends InternalError {
+  constructor(message: string) {
+    const internalMessage =
+      'Unexpected error returned by the StormGlass service'
+    super(`${internalMessage}: ${message}`)
+  }
 }
 
 export class StormGlass {
@@ -59,7 +67,14 @@ export class StormGlass {
       )
       return this.normalizedResponse(response.data)
     } catch (error) {
+      const response = (error as AxiosError).response
       const message = (error as Error).message
+      if (response && response.status) {
+        throw new StormGlassResponseError(
+          `Error: ${JSON.stringify(response.data)} Code: ${response.status}`
+        )
+      }
+
       throw new ClientRequestError(message)
     }
   }
