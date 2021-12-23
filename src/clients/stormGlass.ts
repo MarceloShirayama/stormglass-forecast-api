@@ -1,6 +1,7 @@
 import { InternalError } from '@src/util/errors/internal-error'
 import config, { IConfig } from 'config'
 import * as HTTPUtil from '@src/util/request'
+import { RequestError } from '@src/util/request'
 
 export type StormGlassPointSource = {
   [key: string]: number
@@ -74,11 +75,13 @@ export class StormGlass {
       )
       return this.normalizedResponse(response.data)
     } catch (error) {
-      const response = (error as any).response
       const message = (error as Error).message
-      if (response && response.status) {
+
+      if (HTTPUtil.Request.isRequestError(error as RequestError)) {
         throw new StormGlassResponseError(
-          `Error: ${JSON.stringify(response.data)} Code: ${response.status}`
+          `Error: ${JSON.stringify(
+            (error as RequestError).response?.data
+          )} Code: ${(error as RequestError).response?.status}`
         )
       }
 

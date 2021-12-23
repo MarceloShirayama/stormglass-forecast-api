@@ -4,6 +4,9 @@ import stormGlassWeather3Hours from '@test/fixtures/stormglass_weather_3_hours.j
 import stormGlassNormalized3Hours from '@test/fixtures/stormglass_normalized_response_3_hours.json'
 
 jest.mock('@src/util/request')
+const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
+  typeof HTTPUtil.Request
+>
 const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>
 
 describe('StormGlass client', () => {
@@ -61,6 +64,7 @@ describe('StormGlass client', () => {
     const lat = -33.792726
     const lng = 151.289824
 
+    MockedRequestClass.isRequestError.mockReturnValue(true)
     mockedRequest.get.mockRejectedValue({
       response: {
         status: 429,
