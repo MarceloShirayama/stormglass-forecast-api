@@ -27,6 +27,12 @@ export type TimeForecast = {
   forecast: BeachForecast[]
 }
 
+export class ForecastProcessingInternalError extends Error {
+  constructor(message: string) {
+    super(`Unexpected error during the forecast processing: ${message}`)
+  }
+}
+
 export class Forecast {
   constructor(protected stormGlass = new StormGlass()) {}
 
@@ -53,8 +59,8 @@ export class Forecast {
       }
 
       return this.mapForecastByTime(pointsWithCorrectSources)
-    } catch (err) {
-      throw new Error('Error processing forecast for beaches')
+    } catch (err: any) {
+      throw new ForecastProcessingInternalError(err.message)
     }
   }
 
