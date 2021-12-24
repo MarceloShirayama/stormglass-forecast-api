@@ -1,5 +1,6 @@
 import supertest from 'supertest'
 import { SetupServer } from '@src/server'
+import { Beach } from '@src/models/beach'
 
 let response: supertest.SuperTest<supertest.Test>
 let server: SetupServer
@@ -9,6 +10,7 @@ describe('Beach forecast functional tests', () => {
     server = new SetupServer()
     await server.init()
     response = supertest(server.getApp())
+    await Beach.deleteMany({})
   })
 
   afterEach(async () => {

@@ -1,21 +1,5 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass'
-
-export enum BeachPosition {
-  /* eslint-disable no-unused-vars */
-  S = 'S',
-  E = 'E',
-  W = 'W',
-  N = 'N'
-  /* eslint-enable no-unused-vars */
-}
-
-export type Beach = {
-  lat: number
-  lng: number
-  name: string
-  position: BeachPosition
-  user: string
-}
+import { Beach } from '@src/models/beach'
 
 export type BeachForecast = Omit<Beach, 'user'> &
   ForecastPoint & {
