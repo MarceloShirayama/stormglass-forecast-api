@@ -2,12 +2,17 @@ import supertest from 'supertest'
 import { SetupServer } from '@src/server'
 
 let response: supertest.SuperTest<supertest.Test>
+let server: SetupServer
 
 describe('Beach forecast functional tests', () => {
-  beforeAll(() => {
-    const server = new SetupServer()
-    server.init()
+  beforeEach(async () => {
+    server = new SetupServer()
+    await server.init()
     response = supertest(server.getApp())
+  })
+
+  afterEach(async () => {
+    await server.close()
   })
 
   it('Should return a forecast with just a few times', async () => {
