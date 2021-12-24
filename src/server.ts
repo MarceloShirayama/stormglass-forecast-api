@@ -1,25 +1,30 @@
 import './util/module-alias'
 import { Server } from '@overnightjs/core'
 import * as database from '@src/database'
-import { ForecastController } from './controller/forecast'
-import { Application } from 'express'
+import { ForecastController } from '@src/controller/forecast'
+import express, { Application } from 'express'
+import { BeachesController } from '@src/controller/beaches'
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
-    super(true)
+    super()
   }
 
   public async init(): Promise<void> {
-    await this.databaseSetup()
     this.setupExpress()
+    this.setupControllers()
+    await this.databaseSetup()
+  }
+
+  private setupExpress(): void {
+    this.app.use(express.json())
     this.setupControllers()
   }
 
-  private setupExpress(): void {}
-
   private setupControllers(): void {
     const forecastController = new ForecastController()
-    this.addControllers([forecastController])
+    const beachesController = new BeachesController()
+    this.addControllers([forecastController, beachesController])
   }
 
   private async databaseSetup(): Promise<void> {
