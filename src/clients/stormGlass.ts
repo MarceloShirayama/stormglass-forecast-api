@@ -1,6 +1,6 @@
 import { InternalError } from '@src/util/errors/internal-error'
 import * as HTTPUtil from '@src/util/request'
-import config, { IConfig } from 'config'
+import apiConfig from '@src/config/apiConfig'
 
 export type StormGlassPointSource = {
   [key: string]: number
@@ -48,7 +48,7 @@ export class StormGlassResponseError extends InternalError {
   }
 }
 
-const stormGlassResourceConfig: IConfig = config.get('App.resources.StormGlass')
+const stormGlassResourceConfig = apiConfig.resources
 
 export class StormGlass {
   readonly stormGlassAPIParams =
@@ -61,14 +61,10 @@ export class StormGlass {
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassResourceConfig.get(
-          'apiUrl'
-        )}?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${
-          this.stormGlassAPISource
-        }`,
+        `${stormGlassResourceConfig.apiUrl}?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
         {
           headers: {
-            Authorization: stormGlassResourceConfig.get('apiToken')
+            Authorization: stormGlassResourceConfig.apiToken
           }
         }
       )

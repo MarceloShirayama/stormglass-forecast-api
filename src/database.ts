@@ -1,9 +1,13 @@
-import config, { IConfig } from 'config'
+import databaseConfig from '@src/config/databaseConfig'
 import mongoose from 'mongoose'
 
-const dbConfig: IConfig = config.get('App.database')
+const host = databaseConfig.host
+const port = databaseConfig.port
+const db = databaseConfig.db
+const user = databaseConfig.user
+const pass = databaseConfig.pass
 
-const uri = dbConfig.get('mongoUrl') as string
+const uri = `mongodb://${user}:${pass}@${host}:${port}/${db}`
 
 const options = {
   autoIndex: true, // Build indexes
@@ -16,9 +20,9 @@ const options = {
 export const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(uri, options)
-    console.log('Database is connected')
+    console.info('Database is connected')
   } catch (err) {
-    console.log(err)
+    console.info(err)
   }
 
   mongoose.connection.on('error', (err) => console.error(err))
@@ -26,5 +30,5 @@ export const connect = async (): Promise<void> => {
 
 export const disconnect = async (): Promise<void> => {
   await mongoose.disconnect()
-  console.log('Database is disconnected')
+  console.info('Database is disconnected')
 }
