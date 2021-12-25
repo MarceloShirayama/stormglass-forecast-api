@@ -1,5 +1,5 @@
 {
-  "name": "setup-typescript-nodejs-eslint-prettier",
+  "name": "stormglass-forecast-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
