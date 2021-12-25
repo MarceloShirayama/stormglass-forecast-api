@@ -7,7 +7,7 @@
     "resources": {
       "StormGlass": {
         "apiUrl": "https://api.stormglass.io/v2/weather/point",
-        "apiToken": "f7b7bbf0-9b7f-11ea-9fa5-0242ac130003"
+        "apiToken": "DO-NOT-HARD-CODE-YOUR-API-TOKEN-IN-A-REAL-APP"
       }
     }
   }
