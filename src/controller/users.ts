@@ -14,20 +14,8 @@ export class UsersController {
 
       res.status(201).send(result)
     } catch (error: any) {
-      if (
-        error instanceof mongoose.Error.ValidationError &&
-        error.message ===
-          'User validation failed: password: Email must be at least 5 characters'
-      ) {
+      if (error instanceof mongoose.Error.ValidationError) {
         res.status(400).send({ error: error.message })
-      } else if (
-        error instanceof mongoose.Error.ValidationError &&
-        error.message ===
-          'User validation failed: password: Email must be less than 18 characters'
-      ) {
-        res.status(400).send({ error: error.message })
-      } else if (error instanceof mongoose.Error.ValidationError) {
-        res.status(422).send({ error: error.message })
       } else {
         res.status(500).send({ error: 'Internal Server Error' })
       }
