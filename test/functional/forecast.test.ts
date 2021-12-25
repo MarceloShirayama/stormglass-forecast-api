@@ -53,4 +53,28 @@ describe('Beach forecast functional tests', () => {
     expect(status).toBe(200)
     expect(body).toEqual(expectedResponse)
   })
+
+  it('Should to throw error status code 500 if something goes wrong during the processing', async () => {
+    const dataSendInRequest = 'Something went wrong'
+
+    nock('https://api.stormglass.io:443', {
+      encodedQueryParams: true,
+      reqheaders: {
+        Authorization: (): boolean => true
+      }
+    })
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/v2/weather/point')
+      .query({
+        lat: -33.792726,
+        lng: 151.289824,
+        params: /(.*)/,
+        source: 'noaa'
+      })
+      .reply(200, dataSendInRequest)
+
+    const requestResponse = await response.get('/forecast')
+
+    expect(requestResponse.status).toBe(500)
+  })
 })
