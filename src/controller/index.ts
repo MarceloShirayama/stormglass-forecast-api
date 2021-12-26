@@ -6,22 +6,25 @@ export abstract class BaseController {
   protected sendCreatedUpdateErrorResponse(
     res: Response,
     error: mongoose.Error | Error
-  ): Response {
+  ): void {
     if (error instanceof mongoose.Error.ValidationError) {
-      const duplicateError = Object.values(error.errors).filter(
-        (error: any) => error.kind === CUSTOM_VALIDATION.DUPLICATED
-      )
-      console.log(Object.values(error.errors))
-
-      if (duplicateError.length) {
-        return res.status(409).send({
-          code: 409,
-          error: error.message
-        })
-      }
-      return res.status(422).send({ code: 422, error: error.message })
+      const clientsErrors = this.handleClientErrors(error)
+      res.status(clientsErrors.code).send(clientsErrors)
     } else {
-      return res.status(500).send({ code: 500, error: 'Something went wrong!' })
+      res.status(500).send({ code: 500, error: 'Something went wrong!' })
     }
+  }
+
+  private handleClientErrors(error: mongoose.Error.ValidationError): {
+    code: number
+    error: string
+  } {
+    const duplicateError = Object.values(error.errors).filter(
+      (error: any) => error.kind === CUSTOM_VALIDATION.DUPLICATED
+    )
+    if (duplicateError.length) {
+      return { code: 409, error: error.message }
+    }
+    return { code: 422, error: error.message }
   }
 }
