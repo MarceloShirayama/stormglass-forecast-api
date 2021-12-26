@@ -1,5 +1,6 @@
 import { User } from '@src/models/user'
 import { SetupServer } from '@src/server'
+import AuthService from '@src/services/auth'
 import supertest from 'supertest'
 
 let response: supertest.SuperTest<supertest.Test>
@@ -30,35 +31,37 @@ describe('Users functional tests', () => {
 
       const expectedResponse = await response.post('/users').send(newUser)
 
+      const isValidPassword = await AuthService.comparePassword(
+        newUser.password,
+        expectedResponse.body.password
+      )
+
       expect(expectedResponse.status).toBe(201)
-      expect(expectedResponse.body).toEqual(expect.objectContaining(newUser))
+      expect(isValidPassword).toBe(true)
+      expect(expectedResponse.body).toHaveProperty('id')
+      expect(expectedResponse.body).toEqual(
+        expect.objectContaining({
+          ...newUser,
+          ...{ password: expect.any(String) }
+        })
+      )
     })
 
     it('Should throw error when there is a mongoose validation error', async () => {
       const newUser = {
-        name: 'any_user',
         email: 'any_email@mail.com',
-        password: '1234'
+        password: '12345'
       }
 
       let expectedResponse = await response.post('/users').send(newUser)
 
       expect(expectedResponse.status).toBe(422)
       expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed: password:'
-      )
-
-      newUser.password = '1234567890123456789'
-
-      expectedResponse = await response.post('/users').send(newUser)
-
-      expect(expectedResponse.status).toBe(422)
-      expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed: password:'
+        '"code":422,"error":"User validation failed:'
       )
 
       const newUser2 = {
-        email: 'any_email@mail.com',
+        name: 'any_user',
         password: '12345'
       }
 
@@ -71,26 +74,14 @@ describe('Users functional tests', () => {
 
       const newUser3 = {
         name: 'any_user',
-        password: '12345'
+        email: 'any_email@mail.com'
       }
 
       expectedResponse = await response.post('/users').send(newUser3)
 
-      expect(expectedResponse.status).toBe(422)
-      expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed:'
-      )
-
-      const newUser4 = {
-        name: 'any_user',
-        email: 'any_email@mail.com'
-      }
-
-      expectedResponse = await response.post('/users').send(newUser4)
-
-      expect(expectedResponse.status).toBe(422)
-      expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed:'
+      expect(expectedResponse.status).toBe(403)
+      expect(expectedResponse.text).toEqual(
+        '{"code":403,"error":"Password is required"}'
       )
     })
 
