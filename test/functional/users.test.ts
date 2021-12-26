@@ -49,7 +49,6 @@ describe('Users functional tests', () => {
       )
 
       newUser.password = '1234567890123456789'
-      console.log(newUser)
 
       expectedResponse = await response.post('/users').send(newUser)
 
