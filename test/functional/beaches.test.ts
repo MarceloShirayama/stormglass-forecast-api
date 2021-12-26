@@ -11,13 +11,17 @@ describe('Beaches Functional tests', () => {
     server = new SetupServer()
     await server.init()
     response = supertest(server.getApp())
-    await Beach.deleteMany({})
   })
 
   afterAll(async () => {
     await server.close()
     // await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000))
   })
+
+  afterEach(async () => {
+    await Beach.deleteMany({})
+  })
+
   describe('When creating a beach', () => {
     it('Should create a beach with success', async () => {
       const newBeach: Beach = {
