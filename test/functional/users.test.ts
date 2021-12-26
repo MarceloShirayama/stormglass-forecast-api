@@ -3,14 +3,14 @@ import { SetupServer } from '@src/server'
 import AuthService from '@src/services/auth'
 import supertest from 'supertest'
 
-let response: supertest.SuperTest<supertest.Test>
+let request: supertest.SuperTest<supertest.Test>
 let server: SetupServer
 
 describe('Users functional tests', () => {
   beforeAll(async () => {
     server = new SetupServer()
     await server.init()
-    response = supertest(server.getApp())
+    request = supertest(server.getApp())
   })
 
   afterAll(async () => {
@@ -29,17 +29,13 @@ describe('Users functional tests', () => {
         password: 'any_password'
       }
 
-      const expectedResponse = await response.post('/users').send(newUser)
+      const response = await request.post('/users').send(newUser)
 
-      const isValidPassword = await AuthService.comparePassword(
-        newUser.password,
-        expectedResponse.body.password
-      )
-
-      expect(expectedResponse.status).toBe(201)
-      expect(isValidPassword).toBe(true)
-      expect(expectedResponse.body).toHaveProperty('id')
-      expect(expectedResponse.body).toEqual(
+      expect(response.status).toBe(201)
+      await expect(
+        AuthService.comparePasswords(newUser.password, response.body.password)
+      ).resolves.toBeTruthy()
+      expect(response.body).toEqual(
         expect.objectContaining({
           ...newUser,
           ...{ password: expect.any(String) }
@@ -53,36 +49,39 @@ describe('Users functional tests', () => {
         password: '12345'
       }
 
-      let expectedResponse = await response.post('/users').send(newUser)
+      let response = await request.post('/users').send(newUser)
 
-      expect(expectedResponse.status).toBe(422)
-      expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed:'
-      )
+      expect(response.status).toBe(422)
+      expect(response.body).toEqual({
+        code: 422,
+        error: 'User validation failed: name: Path `name` is required.'
+      })
 
       const newUser2 = {
         name: 'any_user',
         password: '12345'
       }
 
-      expectedResponse = await response.post('/users').send(newUser2)
+      response = await request.post('/users').send(newUser2)
 
-      expect(expectedResponse.status).toBe(422)
-      expect(expectedResponse.text).toContain(
-        '"code":422,"error":"User validation failed:'
-      )
+      expect(response.status).toBe(422)
+      expect(response.body).toEqual({
+        code: 422,
+        error: 'User validation failed: email: Path `email` is required.'
+      })
 
       const newUser3 = {
         name: 'any_user',
         email: 'any_email@mail.com'
       }
 
-      expectedResponse = await response.post('/users').send(newUser3)
+      response = await request.post('/users').send(newUser3)
 
-      expect(expectedResponse.status).toBe(403)
-      expect(expectedResponse.text).toEqual(
-        '{"code":403,"error":"Password is required"}'
-      )
+      expect(response.status).toBe(422)
+      expect(response.body).toEqual({
+        code: 422,
+        error: 'User validation failed: password: Path `password` is required.'
+      })
     })
 
     it('Should throw error 409 when email already exists', async () => {
@@ -92,14 +91,15 @@ describe('Users functional tests', () => {
         password: 'any_password'
       }
 
-      await response.post('/users').send(newUser)
+      await request.post('/users').send(newUser)
 
-      const expectedResponse = await response.post('/users').send(newUser)
+      const response = await request.post('/users').send(newUser)
 
-      expect(expectedResponse.status).toBe(409)
-      expect(expectedResponse.text).toContain(
-        '"code":409,"error":"User validation failed: email: Email already in use"'
-      )
+      expect(response.status).toBe(409)
+      expect(response.body).toEqual({
+        code: 409,
+        error: 'User validation failed: email: Email already in use'
+      })
     })
   })
 })

@@ -5,17 +5,13 @@ export default class AuthService {
     password: string,
     salt = 10
   ): Promise<string> {
-    const hash = await bcrypt.hash(password, salt)
-
-    return hash
+    return await bcrypt.hash(password, salt)
   }
 
-  public static async comparePassword(
+  public static async comparePasswords(
     password: string,
-    hash: string
+    hashedPassword: string
   ): Promise<boolean> {
-    const isValid = await bcrypt.compare(password, hash)
-
-    return isValid
+    return await bcrypt.compare(password, hashedPassword)
   }
 }

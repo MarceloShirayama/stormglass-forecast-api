@@ -1,11 +1,13 @@
-import AuthService from '@src/services/auth'
 import mongoose, { Document, Model } from 'mongoose'
+
 export interface User {
   _id?: string
   name: string
   email: string
   password: string
 }
+
+interface UserModel extends Omit<User, '_id'>, Document {}
 
 const schema = new mongoose.Schema(
   {
@@ -17,10 +19,7 @@ const schema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
-    password: {
-      type: String,
-      required: true
-    }
+    password: { type: String, required: true }
   },
   {
     toJSON: {
@@ -32,8 +31,6 @@ const schema = new mongoose.Schema(
     }
   }
 )
-
-interface UserModel extends Omit<User, '_id'>, Document {}
 
 // eslint-disable-next-line no-redeclare
 export const User: Model<UserModel> = mongoose.model('User', schema)
@@ -52,13 +49,15 @@ schema.path('email').validate(
   CUSTOM_VALIDATION.DUPLICATED
 )
 
-schema.pre<UserModel>('save', async function (): Promise<void> {
-  if (!this.password || !this.isModified('password')) return
-
-  try {
-    const hashedPassword = await AuthService.hashPassword(this.password)
-    this.password = hashedPassword
-  } catch (error) {
-    console.error(`Error hashing the password for user: ${this.name}`)
-  }
-})
+// schema.pre<UserModel>('save', async function (next): Promise<void> {
+//   if (!this.password || !this.isModified('password')) {
+//     next()
+//     return
+//   }
+//   try {
+//     // const hashedPassword = await AuthService.hashPassword(this.password)
+//     this.password = await bcrypt.hash(this.password, 10)
+//   } catch (err) {
+//     console.error(`Error hashing the password for the user ${this.name}`, err)
+//   }
+// })
