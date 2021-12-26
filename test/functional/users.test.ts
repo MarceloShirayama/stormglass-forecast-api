@@ -43,10 +43,9 @@ describe('Users functional tests', () => {
 
       let expectedResponse = await response.post('/users').send(newUser)
 
-      expect(expectedResponse.status).toBe(400)
-      // expect contain 'User validation failed: password:' in string
+      expect(expectedResponse.status).toBe(422)
       expect(expectedResponse.text).toContain(
-        'User validation failed: password:'
+        '"code":422,"error":"User validation failed: password:'
       )
 
       newUser.password = '1234567890123456789'
@@ -54,10 +53,9 @@ describe('Users functional tests', () => {
 
       expectedResponse = await response.post('/users').send(newUser)
 
-      expect(expectedResponse.status).toBe(400)
-      // expect contain 'User validation failed: password:' in string
+      expect(expectedResponse.status).toBe(422)
       expect(expectedResponse.text).toContain(
-        'User validation failed: password:'
+        '"code":422,"error":"User validation failed: password:'
       )
 
       const newUser2 = {
@@ -67,8 +65,10 @@ describe('Users functional tests', () => {
 
       expectedResponse = await response.post('/users').send(newUser2)
 
-      expect(expectedResponse.status).toBe(400)
-      expect(expectedResponse.text).toContain('User validation failed:')
+      expect(expectedResponse.status).toBe(422)
+      expect(expectedResponse.text).toContain(
+        '"code":422,"error":"User validation failed:'
+      )
 
       const newUser3 = {
         name: 'any_user',
@@ -77,8 +77,10 @@ describe('Users functional tests', () => {
 
       expectedResponse = await response.post('/users').send(newUser3)
 
-      expect(expectedResponse.status).toBe(400)
-      expect(expectedResponse.text).toContain('User validation failed:')
+      expect(expectedResponse.status).toBe(422)
+      expect(expectedResponse.text).toContain(
+        '"code":422,"error":"User validation failed:'
+      )
 
       const newUser4 = {
         name: 'any_user',
@@ -87,8 +89,27 @@ describe('Users functional tests', () => {
 
       expectedResponse = await response.post('/users').send(newUser4)
 
-      expect(expectedResponse.status).toBe(400)
-      expect(expectedResponse.text).toContain('User validation failed:')
+      expect(expectedResponse.status).toBe(422)
+      expect(expectedResponse.text).toContain(
+        '"code":422,"error":"User validation failed:'
+      )
+    })
+
+    it('Should throw error 409 when email already exists', async () => {
+      const newUser = {
+        name: 'any_user',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+
+      await response.post('/users').send(newUser)
+
+      const expectedResponse = await response.post('/users').send(newUser)
+
+      expect(expectedResponse.status).toBe(409)
+      expect(expectedResponse.text).toContain(
+        '"code":409,"error":"User validation failed: email: Email already in use"'
+      )
     })
   })
 })

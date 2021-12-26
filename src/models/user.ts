@@ -39,3 +39,17 @@ interface UserModel extends Omit<User, '_id'>, Document {}
 
 // eslint-disable-next-line no-redeclare
 export const User: Model<UserModel> = mongoose.model('User', schema)
+
+export enum CUSTOM_VALIDATION {
+  // eslint-disable-next-line no-unused-vars
+  DUPLICATED = 'DUPLICATED'
+}
+
+schema.path('email').validate(
+  async (email: string): Promise<boolean> => {
+    const emailCount = await mongoose.models.User.countDocuments({ email })
+    return !emailCount
+  },
+  'Email already in use',
+  CUSTOM_VALIDATION.DUPLICATED
+)
