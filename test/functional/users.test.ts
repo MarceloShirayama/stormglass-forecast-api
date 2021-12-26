@@ -16,11 +16,11 @@ describe('Users functional tests', () => {
     await server.close()
   })
 
-  beforeEach(async () => {
+  afterEach(async () => {
     await User.deleteMany({})
   })
 
-  describe('When creating a new user', () => {
+  describe('When creating a new user with encrypted password', () => {
     it('Should successfully create a new user', async () => {
       const newUser = {
         name: 'any_user',
