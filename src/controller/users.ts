@@ -20,4 +20,25 @@ export class UsersController extends BaseController {
       this.sendCreatedUpdateErrorResponse(res, error)
     }
   }
+
+  @Post('authenticate')
+  public async authenticate(req: Request, res: Response): Promise<void> {
+    const { email, password } = req.body
+    const user = await User.findOne({ email })
+
+    if (!user) {
+      console.log('User not found')
+      return
+    }
+
+    if (!(await AuthService.comparePasswords(password, user.password))) {
+      console.log('Invalid password')
+
+      return
+    }
+
+    const token = AuthService.generateToken(user.toJSON())
+
+    res.status(200).send({ token })
+  }
 }

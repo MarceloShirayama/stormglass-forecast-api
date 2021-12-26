@@ -21,8 +21,8 @@ describe('Users functional tests', () => {
     await User.deleteMany({})
   })
 
-  describe('When creating a new user with encrypted password', () => {
-    it('Should successfully create a new user', async () => {
+  describe('When creating a new user', () => {
+    it('Should successfully create a new user with encrypted password', async () => {
       const newUser = {
         name: 'any_user',
         email: 'any_email@mail.com',
@@ -100,6 +100,29 @@ describe('Users functional tests', () => {
         code: 409,
         error: 'User validation failed: email: Email already in use'
       })
+    })
+  })
+
+  describe('When authenticate a user', () => {
+    it('Should generate a valid token for user', async () => {
+      const newUser = {
+        name: 'any_user',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+
+      const passBeforeHash = newUser.password
+
+      newUser.password = await AuthService.hashPassword(newUser.password)
+
+      await new User(newUser).save()
+      const response = await request
+        .post('/users/authenticate')
+        .send({ email: newUser.email, password: passBeforeHash })
+
+      expect(response.body).toEqual(
+        expect.objectContaining({ token: expect.any(String) })
+      )
     })
   })
 })
