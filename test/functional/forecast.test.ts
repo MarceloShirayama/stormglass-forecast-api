@@ -15,17 +15,23 @@ const beach_fake: Beach = {
 }
 
 describe('Beach forecast functional tests', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     server = new SetupServer()
     await server.init()
+  })
+
+  beforeEach(async () => {
     response = supertest(server.getApp())
-    await Beach.deleteMany({})
     const beach = new Beach(beach_fake)
     await beach.save()
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     await server.close()
+  })
+
+  afterEach(async () => {
+    await Beach.deleteMany({})
   })
 
   it('Should return the forecast for the beaches', async () => {
