@@ -9,7 +9,7 @@
     "start": "npm run build && node -r dotenv/config ./dist/src/index.js",
     "lint": "eslint ./src ./test --ext .ts,.js",
     "lint:fix": "eslint ./src ./test --ext .ts,.js --fix",
-    "test": "jest && jest --projects ./test",
+    "test": "jest --runInBand --detectOpenHandles && jest --projects ./test --runInBand --detectOpenHandles",
     "test:functional": "jest --projects ./test --runInBand --detectOpenHandles",
     "test:unit": "jest  --runInBand --detectOpenHandles",
     "test:functional:watch": "jest --watch --projects ./test --runInBand --detectOpenHandles",
