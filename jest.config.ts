@@ -14,7 +14,8 @@ export default {
   setupFiles: [
     '<rootDir>/src/config/apiConfig.ts',
     '<rootDir>/src/config/appConfig.ts',
-    '<rootDir>/src/config/databaseConfig.ts'
+    '<rootDir>/src/config/databaseConfig.ts',
+    '<rootDir>/src/config/authConfig.ts'
   ],
   // collectCoverage: true,
   // collectCoverageFrom: ['<rootDir>/src/modules/**/useCases/**/*.ts'],

@@ -1,3 +1,4 @@
+import authConfig from '@src/config/authConfig'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -17,6 +18,8 @@ export default class AuthService {
   }
 
   public static generateToken(payload: object): string {
-    return jwt.sign(payload, 'test', { expiresIn: '1d' })
+    return jwt.sign(payload, authConfig.secretKey, {
+      expiresIn: authConfig.tokenExpiresIn
+    })
   }
 }
