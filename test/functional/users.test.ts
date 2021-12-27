@@ -116,6 +116,7 @@ describe('Users functional tests', () => {
       newUser.password = await AuthService.hashPassword(newUser.password)
 
       await new User(newUser).save()
+
       const response = await request
         .post('/users/authenticate')
         .send({ email: newUser.email, password: passBeforeHash })
@@ -123,6 +124,40 @@ describe('Users functional tests', () => {
       expect(response.body).toEqual(
         expect.objectContaining({ token: expect.any(String) })
       )
+    })
+
+    it('Should return Unauthorized if incorrect user email', async () => {
+      const response = await request
+        .post('/users/authenticate')
+        .send({ email: 'invalid_email@mail.com', password: 'any_password' })
+
+      expect(response.status).toBe(401)
+      expect(response.body).toEqual({
+        code: 401,
+        error: 'Incorrect email or password'
+      })
+    })
+
+    it('Should return Unauthorized if incorrect user password', async () => {
+      const newUser = {
+        name: 'any_user',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+
+      newUser.password = await AuthService.hashPassword(newUser.password)
+
+      await new User(newUser).save()
+
+      const response = await request
+        .post('/users/authenticate')
+        .send({ email: newUser.email, password: 'invalid_password' })
+
+      expect(response.status).toBe(401)
+      expect(response.body).toEqual({
+        code: 401,
+        error: 'Incorrect email or password'
+      })
     })
   })
 })
