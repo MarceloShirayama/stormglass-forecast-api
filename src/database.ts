@@ -1,4 +1,4 @@
-import databaseConfig from '@src/config/databaseConfig'
+import { databaseConfig } from '@src/envConfig'
 import mongoose from 'mongoose'
 
 const host = databaseConfig.host
@@ -20,7 +20,7 @@ const options = {
 export const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(uri, options)
-    console.info('Database is connected')
+    console.info(`Database ${db} is connected`)
   } catch (err) {
     console.info(err)
   }
@@ -30,5 +30,5 @@ export const connect = async (): Promise<void> => {
 
 export const disconnect = async (): Promise<void> => {
   await mongoose.disconnect()
-  console.info('Database is disconnected')
+  console.info(`Database ${db} is disconnected`)
 }

@@ -5,9 +5,10 @@ import { ForecastController } from '@src/controller/forecast'
 import express, { Application } from 'express'
 import { BeachesController } from '@src/controller/beaches'
 import { UsersController } from './controller/users'
+import { appConfig } from './envConfig'
 
 export class SetupServer extends Server {
-  constructor(private port = 3000) {
+  constructor(private port = appConfig.port, private host = appConfig.host) {
     super()
   }
 
@@ -47,7 +48,7 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      console.info(`Server listening on http://localhost:${this.port}`)
+      console.info(`Server listening on http://${this.host}:${this.port}`)
     })
   }
 }

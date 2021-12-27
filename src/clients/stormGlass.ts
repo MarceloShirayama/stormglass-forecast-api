@@ -1,6 +1,6 @@
 import { InternalError } from '@src/util/errors/internal-error'
 import * as HTTPUtil from '@src/util/request'
-import apiConfig from '@src/config/apiConfig'
+import { apiConfig } from '@src/envConfig'
 
 export type StormGlassPointSource = {
   [key: string]: number

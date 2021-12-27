@@ -1,6 +1,6 @@
 import { SetupServer } from './server'
 import * as dotenv from 'dotenv'
-import appConfig from './config/appConfig'
+import { appConfig } from './envConfig'
 
 dotenv.config()
 // #endregion

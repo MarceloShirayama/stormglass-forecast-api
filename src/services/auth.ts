@@ -1,4 +1,4 @@
-import authConfig from '@src/config/authConfig'
+import { authConfig } from '@src/envConfig'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 

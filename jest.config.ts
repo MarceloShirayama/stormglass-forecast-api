@@ -11,12 +11,7 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
-  setupFiles: [
-    '<rootDir>/src/config/apiConfig.ts',
-    '<rootDir>/src/config/appConfig.ts',
-    '<rootDir>/src/config/databaseConfig.ts',
-    '<rootDir>/src/config/authConfig.ts'
-  ],
+  setupFiles: ['<rootDir>/src/envConfig.ts'],
   // collectCoverage: true,
   // collectCoverageFrom: ['<rootDir>/src/modules/**/useCases/**/*.ts'],
   coverageDirectory: 'coverage',
