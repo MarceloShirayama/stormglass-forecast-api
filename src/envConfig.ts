@@ -30,6 +30,8 @@ export const authConfig = {
 const db =
   appConfig.env === 'test'
     ? process.env.DATABASE_TEST
+    : appConfig.env === 'dev'
+    ? process.env.DATABASE_DEV
     : process.env.MONGO_DATABASE
 
 export const databaseConfig = {
