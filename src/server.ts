@@ -8,7 +8,11 @@ import { UsersController } from './controller/users'
 import { appConfig } from './envConfig'
 
 export class SetupServer extends Server {
-  constructor(private port = appConfig.port, private host = appConfig.host) {
+  constructor(
+    private port = appConfig.port,
+    private host = appConfig.host,
+    private env = appConfig.env
+  ) {
     super()
   }
 
@@ -48,6 +52,7 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
+      console.log(`Environment: ${this.env}`)
       console.info(`Server listening on http://${this.host}:${this.port}`)
     })
   }

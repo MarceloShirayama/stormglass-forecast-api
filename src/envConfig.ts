@@ -4,7 +4,8 @@ dotenv.config()
 
 export const appConfig = {
   host: process.env.APP_HOST,
-  port: Number(process.env.APP_PORT)
+  port: Number(process.env.APP_PORT),
+  env: process.env.NODE_ENV
 }
 
 const apiToken = (
@@ -27,7 +28,7 @@ export const authConfig = {
 }
 
 const db =
-  process.env.NODE_ENV === 'test'
+  appConfig.env === 'test'
     ? process.env.DATABASE_TEST
     : process.env.MONGO_DATABASE
 
