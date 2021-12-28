@@ -2,6 +2,14 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
+/* eslint-disable no-unused-vars */
+enum environment {
+  dev = 'development',
+  test = 'test',
+  prod = 'production'
+  /* eslint-enable no-unused-vars */
+}
+
 export const appConfig = {
   host: process.env.APP_HOST,
   port: Number(process.env.APP_PORT),
@@ -9,7 +17,9 @@ export const appConfig = {
 }
 
 const apiToken = (
-  process.env.NODE_ENV === 'test' ? 'test' : process.env.STORM_GLASS_API_KEY
+  process.env.NODE_ENV === environment.test
+    ? 'test_token'
+    : process.env.STORM_GLASS_API_KEY
 ) as string
 
 export const apiConfig = {
@@ -28,9 +38,9 @@ export const authConfig = {
 }
 
 const db =
-  appConfig.env === 'test'
+  appConfig.env === environment.test
     ? process.env.DATABASE_TEST
-    : appConfig.env === 'dev'
+    : appConfig.env === environment.dev
     ? process.env.DATABASE_DEV
     : process.env.MONGO_DATABASE
 
