@@ -51,3 +51,8 @@ export const databaseConfig = {
   pass: process.env.MONGO_PASSWORD,
   db
 }
+
+export const loggerConfig =
+  appConfig.env !== environment.test
+    ? { enabled: true, level: 'info' }
+    : { enabled: false }

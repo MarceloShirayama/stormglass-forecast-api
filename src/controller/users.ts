@@ -1,4 +1,5 @@
 import { Controller, Post } from '@overnightjs/core'
+import logger from '@src/logger'
 import { User } from '@src/models/user'
 import AuthService from '@src/services/auth'
 // import AuthService from '@src/services/auth'
@@ -27,12 +28,14 @@ export class UsersController extends BaseController {
     const user = await User.findOne({ email })
 
     if (!user || !user.email) {
+      logger.error('Incorrect email')
       return res
         .status(401)
         .send({ code: 401, error: 'Incorrect email or password' })
     }
 
     if (!(await AuthService.comparePasswords(password, user.password))) {
+      logger.error('Incorrect password')
       return res
         .status(401)
         .send({ code: 401, error: 'Incorrect email or password' })
@@ -40,6 +43,7 @@ export class UsersController extends BaseController {
 
     const token = AuthService.generateToken(user.toJSON())
 
+    logger.info(`User ${user.email} authenticated`)
     return res.status(200).send({ token })
   }
 }

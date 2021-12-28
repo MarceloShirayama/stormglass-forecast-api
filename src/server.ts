@@ -6,6 +6,7 @@ import express, { Application } from 'express'
 import { BeachesController } from '@src/controller/beaches'
 import { UsersController } from './controller/users'
 import { appConfig } from './envConfig'
+import logger from './logger'
 
 export class SetupServer extends Server {
   constructor(
@@ -52,8 +53,8 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      console.log(`Environment: ${this.env}`)
-      console.info(`Server listening on http://${this.host}:${this.port}`)
+      logger.info(`Environment: ${this.env}`)
+      logger.info(`Server listening on http://${this.host}:${this.port}`)
     })
   }
 }

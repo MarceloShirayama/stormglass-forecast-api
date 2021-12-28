@@ -1,5 +1,6 @@
 import { databaseConfig } from '@src/envConfig'
 import mongoose from 'mongoose'
+import logger from './logger'
 
 const host = databaseConfig.host
 const port = databaseConfig.port
@@ -20,15 +21,15 @@ const options = {
 export const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(uri, options)
-    console.info(`Database ${db} is connected`)
+    logger.info(`Database ${db} is connected`)
   } catch (err) {
-    console.info(err)
+    logger.info(err)
   }
 
-  mongoose.connection.on('error', (err) => console.error(err))
+  mongoose.connection.on('error', (err) => logger.error(err))
 }
 
 export const disconnect = async (): Promise<void> => {
   await mongoose.disconnect()
-  console.info(`Database ${db} is disconnected`)
+  logger.info(`Database ${db} is disconnected`)
 }

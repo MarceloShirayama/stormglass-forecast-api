@@ -1,4 +1,5 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass'
+import logger from '@src/logger'
 import { Beach } from '@src/models/beach'
 
 export type BeachForecast = Omit<Beach, 'user'> &
@@ -24,6 +25,7 @@ export class Forecast {
     beaches: Beach[]
   ): Promise<TimeForecast[]> {
     const pointsWithCorrectSources: BeachForecast[] = []
+    logger.info(`Processing forecast for ${beaches.length} beaches`)
 
     try {
       for (const beach of beaches) {
@@ -34,8 +36,9 @@ export class Forecast {
       }
 
       return this.mapForecastByTime(pointsWithCorrectSources)
-    } catch (err: any) {
-      throw new ForecastProcessingInternalError(err.message)
+    } catch (error: any) {
+      logger.error(error)
+      throw new ForecastProcessingInternalError(error.message)
     }
   }
 
