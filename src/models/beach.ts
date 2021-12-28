@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
+import { User } from './user'
 
 export enum BeachPosition {
   /* eslint-disable no-unused-vars */
@@ -15,6 +16,7 @@ export interface Beach {
   lng: number
   name: string
   position: BeachPosition
+  user: typeof User.prototype.id
 }
 
 const schema = new mongoose.Schema(

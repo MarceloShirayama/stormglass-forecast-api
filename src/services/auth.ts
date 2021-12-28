@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export interface DecodeUser extends Omit<User, '_id'> {
-  _id: string
+  id: string
 }
 
 export default class AuthService {

@@ -1,25 +1,42 @@
-import supertest from 'supertest'
-import { SetupServer } from '@src/server'
 import { Beach, BeachPosition } from '@src/models/beach'
+import { User } from '@src/models/user'
+import { SetupServer } from '@src/server'
+import AuthService from '@src/services/auth'
+import supertest from 'supertest'
 
 let response: supertest.SuperTest<supertest.Test>
 let server: SetupServer
+let userId: string
 
 describe('Beaches Functional tests', () => {
   // jest.setTimeout(150000)
+  const userFake = {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password'
+  }
+  let token: string
+
   beforeAll(async () => {
     server = new SetupServer()
     await server.init()
     response = supertest(server.getApp())
   })
 
-  afterAll(async () => {
-    await server.close()
-    // await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000))
+  beforeEach(async () => {
+    const user = await new User(userFake).save()
+    userId = user.id
+    token = AuthService.generateToken(user.toJSON())
   })
 
   afterEach(async () => {
     await Beach.deleteMany({})
+    await User.deleteMany({})
+  })
+
+  afterAll(async () => {
+    await server.close()
+    // await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000))
   })
 
   describe('When creating a beach', () => {
@@ -28,10 +45,14 @@ describe('Beaches Functional tests', () => {
         lat: -33.792726,
         lng: 151.289824,
         name: 'Manly',
-        position: BeachPosition.E
+        position: BeachPosition.E,
+        user: userId
       }
 
-      const expectedResponse = await response.post('/beaches').send(newBeach)
+      const expectedResponse = await response
+        .post('/beaches')
+        .set({ 'x-access-token': token })
+        .send(newBeach)
 
       expect(expectedResponse.status).toBe(201)
       expect(expectedResponse.body).toEqual(expect.objectContaining(newBeach))
