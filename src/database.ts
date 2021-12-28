@@ -22,11 +22,11 @@ export const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(uri, options)
     logger.info(`Database ${db} is connected`)
-  } catch (err) {
-    logger.info(err)
+  } catch (error: any) {
+    logger.error(error.message)
   }
 
-  mongoose.connection.on('error', (err) => logger.error(err))
+  mongoose.connection.on('error', (error) => logger.error(error.message))
 }
 
 export const disconnect = async (): Promise<void> => {
