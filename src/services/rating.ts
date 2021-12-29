@@ -34,4 +34,17 @@ export class Rating {
         this.beach.position === BeachPosition.W)
     )
   }
+
+  public getRatingForSwellPeriod(period: number): number {
+    if (period <= 5) {
+      return 1
+    }
+    if (period > 5 && period <= 9) {
+      return 2
+    }
+    if (period > 9 && period <= 13) {
+      return 4
+    }
+    return 5
+  }
 }

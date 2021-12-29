@@ -65,4 +65,30 @@ describe('Rating Service', () => {
       expect(rating).toBe(5)
     })
   })
+
+  describe('Get rating based on swell period', () => {
+    it('Should get a rating of 1 for a period of less than or equal to 6 seconds', () => {
+      const rating = defaultRating.getRatingForSwellPeriod(5)
+
+      expect(rating).toBe(1)
+    })
+
+    it('Should get a rating of 2 for a period longer than 5 seconds', () => {
+      const rating = defaultRating.getRatingForSwellPeriod(9)
+
+      expect(rating).toBe(2)
+    })
+
+    it('Should get a rating of 4 for a period longer than 9 seconds', () => {
+      const rating = defaultRating.getRatingForSwellPeriod(12)
+
+      expect(rating).toBe(4)
+    })
+
+    it('Should get a rating of 5 for a period longer than 14 seconds', () => {
+      const rating = defaultRating.getRatingForSwellPeriod(16)
+
+      expect(rating).toBe(5)
+    })
+  })
 })
