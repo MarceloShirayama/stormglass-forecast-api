@@ -1,5 +1,23 @@
 import { Beach, BeachPosition } from '@src/models/beach'
 
+const waveHeights = {
+  ankleToKnee: {
+    min: 0.2,
+    max: 0.69
+  },
+  kneeToWaist: {
+    min: 0.7,
+    max: 1.49
+  },
+  waistHigh: {
+    min: 1.5,
+    max: 1.9
+  },
+  headHigh: {
+    min: 2.0
+  }
+}
+
 export class Rating {
   constructor(private beach: Beach) {}
 
@@ -43,6 +61,31 @@ export class Rating {
       return 2
     }
     if (period > 9 && period <= 13) {
+      return 4
+    }
+    return 5
+  }
+
+  public getRatingForSwellSize(height: number): number {
+    if (height < waveHeights.ankleToKnee.min) {
+      return 1
+    }
+    if (
+      height >= waveHeights.ankleToKnee.min &&
+      height <= waveHeights.ankleToKnee.max
+    ) {
+      return 2
+    }
+    if (
+      height >= waveHeights.kneeToWaist.min &&
+      height <= waveHeights.kneeToWaist.max
+    ) {
+      return 3
+    }
+    if (
+      height >= waveHeights.waistHigh.min &&
+      height <= waveHeights.waistHigh.max
+    ) {
       return 4
     }
     return 5
