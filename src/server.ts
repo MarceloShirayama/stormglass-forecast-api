@@ -29,7 +29,6 @@ export class SetupServer extends Server {
     this.app.use(express.json())
     this.app.use(expressPino({ logger }))
     this.app.use(cors({ origin: '*' }))
-    this.setupControllers()
   }
 
   private setupControllers(): void {
