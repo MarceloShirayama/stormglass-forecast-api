@@ -90,4 +90,17 @@ export class Rating {
     }
     return 5
   }
+
+  public getPositionFromLocation(coordinates: number): BeachPosition {
+    if (coordinates >= 45 && coordinates <= 135) {
+      return BeachPosition.E
+    }
+    if (coordinates > 135 && coordinates < 225) {
+      return BeachPosition.S
+    }
+    if (coordinates >= 225 && coordinates <= 315) {
+      return BeachPosition.W
+    }
+    return BeachPosition.N
+  }
 }
