@@ -167,4 +167,43 @@ describe('Users functional tests', () => {
       })
     })
   })
+
+  describe('When getting user profile info', () => {
+    it(`Should return the token's owner profile information`, async () => {
+      const newUser = {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+
+      newUser.password = await AuthService.hashPassword(newUser.password)
+
+      const user = await new User(newUser).save()
+      const token = AuthService.generateToken(user.toJSON())
+
+      const { body, status } = await request
+        .get('/users/me')
+        .set({ 'x-access-token': token })
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject(JSON.parse(JSON.stringify({ user })))
+    })
+
+    it(`Should throw Not Found, when the user is not found`, async () => {
+      const userNotSaveInDB = {
+        name: 'invalid_user',
+        email: 'invalid_email@mail.com',
+        password: 'invalid_password',
+        id: 'invalid_id'
+      }
+      const token = AuthService.generateToken(userNotSaveInDB)
+
+      const { body, status } = await request
+        .get('/users/me')
+        .set({ 'x-access-token': token })
+
+      expect(status).toBe(404)
+      expect(body.message).toBe('User not found!')
+    })
+  })
 })

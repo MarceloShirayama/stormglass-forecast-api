@@ -1,0 +1,20 @@
+@startuml user-registration-and-authentication
+skinparam sequenceMessageAlign left
+header User registration and authentication flow
+User -> Web: Fill out the registration form
+Web -> API: Create a user
+Web -> API: Generate a Token for the user
+API -> API
+note left
+  The Web store the token locally
+  and redirects the users to the forecast page
+end note
+API -> Web: Returns a Json Web Token
+Web -> API: Request the logged user informations from the /users/me endpoint
+API -> Web: Returns the information for the user
+Web -> Web
+note right
+  Web store the user information locally
+end note
+
+@enduml
