@@ -54,7 +54,8 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(422)
       expect(response.body).toEqual({
         code: 422,
-        error: 'User validation failed: name: Path `name` is required.'
+        error: 'Unprocessable Entity',
+        message: 'User validation failed: name: Path `name` is required.'
       })
 
       const newUser2 = {
@@ -67,7 +68,8 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(422)
       expect(response.body).toEqual({
         code: 422,
-        error: 'User validation failed: email: Path `email` is required.'
+        error: 'Unprocessable Entity',
+        message: 'User validation failed: email: Path `email` is required.'
       })
 
       const newUser3 = {
@@ -80,7 +82,9 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(422)
       expect(response.body).toEqual({
         code: 422,
-        error: 'User validation failed: password: Path `password` is required.'
+        error: 'Unprocessable Entity',
+        message:
+          'User validation failed: password: Path `password` is required.'
       })
     })
 
@@ -98,7 +102,8 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(409)
       expect(response.body).toEqual({
         code: 409,
-        error: 'User validation failed: email: Email already in use'
+        error: 'Conflict',
+        message: 'User validation failed: email: Email already in use'
       })
     })
   })
@@ -134,7 +139,8 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(401)
       expect(response.body).toEqual({
         code: 401,
-        error: 'Incorrect email or password'
+        error: 'Unauthorized',
+        message: 'Incorrect email or password'
       })
     })
 
@@ -156,7 +162,8 @@ describe('Users functional tests', () => {
       expect(response.status).toBe(401)
       expect(response.body).toEqual({
         code: 401,
-        error: 'Incorrect email or password'
+        error: 'Unauthorized',
+        message: 'Incorrect email or password'
       })
     })
   })

@@ -29,16 +29,18 @@ export class UsersController extends BaseController {
 
     if (!user || !user.email) {
       logger.error('Incorrect email')
-      return res
-        .status(401)
-        .send({ code: 401, error: 'Incorrect email or password' })
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'Incorrect email or password'
+      })
     }
 
     if (!(await AuthService.comparePasswords(password, user.password))) {
       logger.error('Incorrect password')
-      return res
-        .status(401)
-        .send({ code: 401, error: 'Incorrect email or password' })
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'Incorrect email or password'
+      })
     }
 
     const token = AuthService.generateToken(user.toJSON())
