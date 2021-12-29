@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 import { User } from './user'
 
-export enum BeachPosition {
+export enum GeoPosition {
   /* eslint-disable no-unused-vars */
   S = 'S',
   E = 'E',
@@ -15,7 +15,7 @@ export interface Beach {
   lat: number
   lng: number
   name: string
-  position: BeachPosition
+  position: GeoPosition
   user: typeof User.prototype.id
 }
 

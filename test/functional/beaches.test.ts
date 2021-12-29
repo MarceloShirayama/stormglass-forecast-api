@@ -1,4 +1,4 @@
-import { Beach, BeachPosition } from '@src/models/beach'
+import { Beach, GeoPosition } from '@src/models/beach'
 import { User } from '@src/models/user'
 import { SetupServer } from '@src/server'
 import AuthService from '@src/services/auth'
@@ -45,7 +45,7 @@ describe('Beaches Functional tests', () => {
         lat: -33.792726,
         lng: 151.289824,
         name: 'Manly',
-        position: BeachPosition.E,
+        position: GeoPosition.E,
         user: userId
       }
 
