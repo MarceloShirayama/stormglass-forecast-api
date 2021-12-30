@@ -57,5 +57,25 @@ describe('Beaches Functional tests', () => {
       expect(expectedResponse.status).toBe(201)
       expect(expectedResponse.body).toEqual(expect.objectContaining(newBeach))
     })
+
+    it('Should return a 400 when token is not provider', async () => {
+      const newBeach: Beach = {
+        lat: -33.792726,
+        lng: 151.289824,
+        name: 'Manly',
+        position: GeoPosition.E,
+        user: userId
+      }
+
+      const expectedResponse = await response.post('/beaches').send(newBeach)
+
+      expect(expectedResponse.status).toBe(400)
+    })
+
+    it('Should return a 400 when beach is not provider', async () => {
+      const expectedResponse = await response.post('/beaches')
+
+      expect(expectedResponse.status).toBe(415)
+    })
   })
 })
