@@ -48,6 +48,7 @@ export class SetupServer extends Server {
   }
 
   private docSetup(): void {
+    apiSchema.servers[0].url = `http://${appConfig.host}:${appConfig.port}`
     this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiSchema))
     this.app.use(
       OpenApiValidator.middleware({

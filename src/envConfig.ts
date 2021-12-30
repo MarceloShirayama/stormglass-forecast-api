@@ -11,9 +11,15 @@ enum environment {
 }
 
 export const appConfig = {
-  host: process.env.APP_HOST,
-  port: Number(process.env.APP_PORT),
-  env: process.env.NODE_ENV
+  env: process.env.NODE_ENV,
+  host:
+    process.env.NODE_ENV === environment.dev
+      ? process.env.APP_HOST_LOCAL
+      : process.env.APP_HOST_PROD,
+  port:
+    process.env.NODE_ENV === environment.dev
+      ? Number(process.env.APP_PORT_LOCAL)
+      : Number(process.env.APP_PORT_PROD)
 }
 
 const apiToken = (
