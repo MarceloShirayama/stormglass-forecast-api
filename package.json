@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "NODE_ENV=development ts-node-dev -r dotenv/config --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts | pino-pretty -c",
+    "dev": "NODE_ENV=development ts-node-dev -r dotenv/config --inspect=0.0.0.0:9222 --transpile-only --ignore-watch node_modules --respawn src/index.ts | pino-pretty -c",
     "start": "npm run build && NODE_ENV=production node -r dotenv/config ./dist/src/index.js",
     "lint": "eslint ./src ./test --ext .ts,.js",
     "lint:fix": "eslint ./src ./test --ext .ts,.js --fix",
