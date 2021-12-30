@@ -51,10 +51,10 @@ describe('Users functional tests', () => {
 
       let response = await request.post('/users').send(newUser)
 
-      expect(response.status).toBe(422)
+      expect(response.status).toBe(400)
       expect(response.body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
+        code: 400,
+        error: 'Bad Request',
         message: 'User validation failed: name: Path `name` is required.'
       })
 
@@ -65,10 +65,10 @@ describe('Users functional tests', () => {
 
       response = await request.post('/users').send(newUser2)
 
-      expect(response.status).toBe(422)
+      expect(response.status).toBe(400)
       expect(response.body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
+        code: 400,
+        error: 'Bad Request',
         message: 'User validation failed: email: Path `email` is required.'
       })
 
@@ -79,10 +79,10 @@ describe('Users functional tests', () => {
 
       response = await request.post('/users').send(newUser3)
 
-      expect(response.status).toBe(422)
+      expect(response.status).toBe(400)
       expect(response.body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
+        code: 400,
+        error: 'Bad Request',
         message:
           'User validation failed: password: Path `password` is required.'
       })
