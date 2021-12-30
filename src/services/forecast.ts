@@ -34,6 +34,7 @@ export class Forecast {
       const timeForecast = this.mapForecastByTime(beachesForecast)
       return timeForecast.map((listOfBeaches) => ({
         time: listOfBeaches.time,
+        // TODO: allow ordering to be dynamically
         forecast: _.orderBy(listOfBeaches.forecast, 'rating', 'desc')
       }))
     } catch (error: any) {
