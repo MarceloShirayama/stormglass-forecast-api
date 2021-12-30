@@ -9,7 +9,7 @@
     "start": "npm run build && NODE_ENV=production node -r dotenv/config ./dist/src/index.js",
     "lint": "eslint ./src ./test --ext .ts,.js",
     "lint:fix": "eslint ./src ./test --ext .ts,.js --fix",
-    "test": "jest --runInBand && jest --projects ./test --runInBand",
+    "test": "npm run lint && npm run style:check && jest --runInBand && jest --projects ./test --runInBand",
     "test:functional": "jest --projects ./test --runInBand --detectOpenHandles",
     "test:unit": "jest  --runInBand --detectOpenHandles",
     "test:functional:watch": "jest --watch --projects ./test --runInBand --detectOpenHandles",
