@@ -13,6 +13,7 @@ import { BeachesController } from '@src/controller/beaches'
 import { UsersController } from './controller/users'
 import { appConfig } from './envConfig'
 import logger from './logger'
+import { apiErrorValidator } from './middlewares/api-error-validator'
 
 export class SetupServer extends Server {
   constructor(
@@ -28,12 +29,17 @@ export class SetupServer extends Server {
     this.docSetup()
     this.setupControllers()
     await this.databaseSetup()
+    this.setErrorHandlers()
   }
 
   private setupExpress(): void {
     this.app.use(express.json())
     this.app.use(expressPino({ logger }))
     this.app.use(cors({ origin: '*' }))
+  }
+
+  private setErrorHandlers(): void {
+    this.app.use(apiErrorValidator)
   }
 
   private setupControllers(): void {

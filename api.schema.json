@@ -212,6 +212,21 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Error validating the beach data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "code": "401",
+                  "error": "Unauthorized"
+                }
+              }
+            }
           }
         }
       }

@@ -70,12 +70,22 @@ describe('Beaches Functional tests', () => {
       const expectedResponse = await response.post('/beaches').send(newBeach)
 
       expect(expectedResponse.status).toBe(400)
+      expect(expectedResponse.body).toEqual({
+        message: `request.headers should have required property 'x-access-token'`,
+        code: 400,
+        error: 'Bad Request'
+      })
     })
 
     it('Should return a 400 when beach is not provider', async () => {
       const expectedResponse = await response.post('/beaches')
 
       expect(expectedResponse.status).toBe(415)
+      expect(expectedResponse.body).toEqual({
+        message: 'unsupported media type undefined',
+        code: 415,
+        error: 'Unsupported Media Type'
+      })
     })
   })
 })
