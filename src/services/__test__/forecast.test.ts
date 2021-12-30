@@ -8,7 +8,7 @@ jest.mock('@src/clients/stormGlass')
 describe('Forecast Service', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>
 
-  it('should return the forecast for multiple beaches in the same hour with different ratings', async () => {
+  it('should return the forecast for multiple beaches in the same hour with different ratings sorted by rating', async () => {
     mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 123.41,
@@ -24,7 +24,7 @@ describe('Forecast Service', () => {
     mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 64.26,
-        swellHeight: 0.15,
+        swellHeight: 1.15,
         swellPeriod: 13.89,
         time: '2020-04-26T00:00:00+00:00',
         waveDirection: 231.38,
@@ -55,6 +55,21 @@ describe('Forecast Service', () => {
         forecast: [
           {
             lat: -33.792726,
+            lng: 141.289824,
+            name: 'Dee Why',
+            position: 'S',
+            rating: 4,
+            swellDirection: 64.26,
+            swellHeight: 1.15,
+            swellPeriod: 13.89,
+            time: '2020-04-26T00:00:00+00:00',
+            waveDirection: 231.38,
+            waveHeight: 2.07,
+            windDirection: 299.45,
+            windSpeed: 100
+          },
+          {
+            lat: -33.792726,
             lng: 151.289824,
             name: 'Manly',
             position: 'E',
@@ -66,21 +81,6 @@ describe('Forecast Service', () => {
             waveDirection: 232.12,
             waveHeight: 0.46,
             windDirection: 310.48,
-            windSpeed: 100
-          },
-          {
-            lat: -33.792726,
-            lng: 141.289824,
-            name: 'Dee Why',
-            position: 'S',
-            rating: 3,
-            swellDirection: 64.26,
-            swellHeight: 0.15,
-            swellPeriod: 13.89,
-            time: '2020-04-26T00:00:00+00:00',
-            waveDirection: 231.38,
-            waveHeight: 2.07,
-            windDirection: 299.45,
             windSpeed: 100
           }
         ]

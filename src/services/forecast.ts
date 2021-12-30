@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass'
 import logger from '@src/logger'
 import { Beach } from '@src/models/beach'
@@ -40,7 +41,11 @@ export class Forecast {
         pointsWithCorrectSources.push(...enrichedBeachData)
       }
 
-      return this.mapForecastByTime(pointsWithCorrectSources)
+      const timeForecast = this.mapForecastByTime(pointsWithCorrectSources)
+      return timeForecast.map((listOfBeaches) => ({
+        time: listOfBeaches.time,
+        forecast: _.orderBy(listOfBeaches.forecast, 'rating', 'desc')
+      }))
     } catch (error: any) {
       logger.error(error)
       throw new ForecastProcessingInternalError(error.message)
