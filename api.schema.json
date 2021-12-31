@@ -255,6 +255,21 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Too many requests to the /forecast endpoint",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "exceeded the limit of 1 request per hour for the /forecast endpoint, try again later",
+                  "code": "409",
+                  "error": "Too Many Requests"
+                }
+              }
+            }
           }
         }
       }

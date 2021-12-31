@@ -22,6 +22,11 @@ export const appConfig = {
       : Number(process.env.APP_PORT_PROD)
 }
 
+export const requestLimitConfig = {
+  windowMs: 1 * 1000 * 60 * 60,
+  requestPerHour: 1
+}
+
 const apiToken = (
   process.env.NODE_ENV === environment.test
     ? 'test_token'
