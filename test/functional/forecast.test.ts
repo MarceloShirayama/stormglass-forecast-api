@@ -6,7 +6,7 @@ import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json'
 import { User } from '@src/models/user'
 import AuthService from '@src/services/auth'
-import { requestLimitConfig } from '@src/envConfig'
+import { apiConfig } from '@src/envConfig'
 
 let request: supertest.SuperTest<supertest.Test>
 let server: SetupServer
@@ -104,7 +104,7 @@ describe('Beach forecast functional tests', () => {
 
   it('Should to throw error status code 429 if request limit is exceeded', async () => {
     const dataSendInRequest = stormGlassWeather3HoursFixture
-    const limitRate = requestLimitConfig.requestPerHour
+    const limitRate = apiConfig.requestLimit.requestPerHour
     const expectedResponse = {
       code: 429,
       error: 'Too Many Requests',

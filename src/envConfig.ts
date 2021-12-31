@@ -22,11 +22,6 @@ export const appConfig = {
       : Number(process.env.APP_PORT_PROD)
 }
 
-export const requestLimitConfig = {
-  windowMs: 1 * 1000 * 60 * 60,
-  requestPerHour: 10
-}
-
 const apiToken = (
   process.env.NODE_ENV === environment.test
     ? 'test_token'
@@ -40,6 +35,10 @@ export const apiConfig = {
     endTimestampInDays: Number(
       process.env.STORM_GLASS_API_END_TIMESTAMP_IN_DAYS
     )
+  },
+  requestLimit: {
+    windowMs: 1 * 1000 * 60 * 60,
+    requestPerHour: 10
   }
 }
 

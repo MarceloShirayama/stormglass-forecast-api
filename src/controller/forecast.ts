@@ -1,5 +1,5 @@
 import { ClassMiddleware, Controller, Get } from '@overnightjs/core'
-import { requestLimitConfig } from '@src/envConfig'
+import { apiConfig } from '@src/envConfig'
 import logger from '@src/logger'
 import { authMiddleware } from '@src/middlewares/auth'
 import { Beach } from '@src/models/beach'
@@ -11,10 +11,10 @@ import { BaseController } from '.'
 
 const forecast = new Forecast()
 
-const requestsPerHour = requestLimitConfig.requestPerHour
+const requestsPerHour = apiConfig.requestLimit.requestPerHour
 
 const limiter = rateLimit({
-  windowMs: requestLimitConfig.windowMs,
+  windowMs: apiConfig.requestLimit.windowMs,
   max: requestsPerHour + 1,
   keyGenerator: (req: Request) => req.ip,
   handler: (req: Request, res: Response): void => {
