@@ -1,6 +1,7 @@
 import { InternalError } from '@src/util/errors/internal-error'
 import * as HTTPUtil from '@src/util/request'
 import { apiConfig } from '@src/envConfig'
+import { TimeUtil } from '@src/util/time'
 
 export type StormGlassPointSource = {
   [key: string]: number
@@ -59,9 +60,11 @@ export class StormGlass {
   constructor(protected request = new HTTPUtil.Request()) {}
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
+    const endTimestampInDays = apiConfig.resources.endTimestampInDays
+    const endTimestamp = TimeUtil.getUnixTimeForAFutureDay(endTimestampInDays)
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassResourceConfig.apiUrl}?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
+        `${stormGlassResourceConfig.apiUrl}?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&end=${endTimestamp}`,
         {
           headers: {
             Authorization: stormGlassResourceConfig.apiToken

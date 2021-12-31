@@ -36,7 +36,10 @@ const apiToken = (
 export const apiConfig = {
   resources: {
     apiUrl: process.env.STORMGLASS_API_URL as string,
-    apiToken
+    apiToken,
+    endTimestampInDays: Number(
+      process.env.STORM_GLASS_API_END_TIMESTAMP_IN_DAYS
+    )
   }
 }
 

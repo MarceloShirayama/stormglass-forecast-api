@@ -62,7 +62,8 @@ describe('Beach forecast functional tests', () => {
         lat: -33.792726,
         lng: 151.289824,
         params: /(.*)/,
-        source: 'noaa'
+        source: 'noaa',
+        end: /(.*)/
       })
       .reply(200, dataSendInRequest)
 
@@ -89,7 +90,8 @@ describe('Beach forecast functional tests', () => {
         lat: -33.792726,
         lng: 151.289824,
         params: /(.*)/,
-        source: 'noaa'
+        source: 'noaa',
+        end: /(.*)/
       })
       .reply(200, dataSendInRequest)
 
@@ -121,7 +123,8 @@ describe('Beach forecast functional tests', () => {
         lat: -33.792726,
         lng: 151.289824,
         params: /(.*)/,
-        source: 'noaa'
+        source: 'noaa',
+        end: /(.*)/
       })
       .reply(200, dataSendInRequest)
 
