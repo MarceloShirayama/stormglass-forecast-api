@@ -59,6 +59,8 @@ export class StormGlass {
 
   constructor(protected request = new HTTPUtil.Request()) {}
 
+  // TODO: add the ability to get the forecast for a specific time
+  // TODO: add cache to store this call
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     const endTimestampInDays = apiConfig.resources.endTimestampInDays
     const endTimestamp = TimeUtil.getUnixTimeForAFutureDay(endTimestampInDays)

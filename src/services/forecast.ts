@@ -83,6 +83,7 @@ export class Forecast {
 
     for (const beach of beaches) {
       const rating = new this.RatingService(beach)
+      // TODO: call stormglass only once for all beaches, in parallel with promiseAll
       const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng)
       const enrichedBeachData = this.enrichedBeachData(points, beach, rating)
 
