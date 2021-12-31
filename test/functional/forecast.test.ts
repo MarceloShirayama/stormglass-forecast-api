@@ -2,11 +2,12 @@ import supertest from 'supertest'
 import nock from 'nock'
 import { SetupServer } from '@src/server'
 import { Beach, GeoPosition } from '@src/models/beach'
-import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json'
-import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json'
 import { User } from '@src/models/user'
 import AuthService from '@src/services/auth'
 import { apiConfig } from '@src/envConfig'
+import CacheUtil from '@src/util/cache'
+import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json'
+import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json'
 
 let request: supertest.SuperTest<supertest.Test>
 let server: SetupServer
@@ -40,6 +41,7 @@ describe('Beach forecast functional tests', () => {
   afterEach(async () => {
     await Beach.deleteMany({})
     await User.deleteMany({})
+    CacheUtil.clearAllCache()
   })
 
   afterAll(async () => {

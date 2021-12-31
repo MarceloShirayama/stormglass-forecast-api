@@ -37,9 +37,13 @@ export const apiConfig = {
     )
   },
   requestLimit: {
-    windowMs: 1 * 1000 * 60 * 60,
-    requestPerHour: 10
-  }
+    windowMs:
+      (Number(process.env.FORECAST_REQUEST_WINDOW_HOUR) * 1000 * 60 * 60) |
+      (1 * 1000 * 60 * 60), // 1 hour
+    requestPerHour: Number(process.env.REQUEST_LIMIT_PER_HOUR) | 10 // 10 requests per hour
+  },
+  cacheTTL:
+    (Number(process.env.STORM_GLASS_API_CACHE_TTL) * 60 * 60) | (24 * 60 * 60) // default 24 hours
 }
 
 const secretKey = process.env.AUTH_SECRET_KEY as string
