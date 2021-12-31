@@ -6,8 +6,9 @@ import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json'
 import { User } from '@src/models/user'
 import AuthService from '@src/services/auth'
+import { requestLimitConfig } from '@src/envConfig'
 
-let response: supertest.SuperTest<supertest.Test>
+let request: supertest.SuperTest<supertest.Test>
 let server: SetupServer
 let token: string
 const userFake = {
@@ -23,7 +24,7 @@ describe('Beach forecast functional tests', () => {
   })
 
   beforeEach(async () => {
-    response = supertest(server.getApp())
+    request = supertest(server.getApp())
     const user = await new User(userFake).save()
     const beachFake: Beach = {
       lat: -33.792726,
@@ -65,7 +66,7 @@ describe('Beach forecast functional tests', () => {
       })
       .reply(200, dataSendInRequest)
 
-    const { body, status } = await response
+    const { body, status } = await request
       .get('/forecast')
       .set({ 'x-access-token': token })
 
@@ -92,10 +93,49 @@ describe('Beach forecast functional tests', () => {
       })
       .reply(200, dataSendInRequest)
 
-    const requestResponse = await response
+    const requestResponse = await request
       .get('/forecast')
       .set({ 'x-access-token': token })
 
     expect(requestResponse.status).toBe(500)
+  })
+
+  it('Should to throw error status code 429 if request limit is exceeded', async () => {
+    const dataSendInRequest = stormGlassWeather3HoursFixture
+    const limitRate = requestLimitConfig.requestPerHour
+    const expectedResponse = {
+      code: 429,
+      error: 'Too Many Requests',
+      message: `exceeded the limit of ${limitRate} request per hour for the /forecast endpoint, try again later`
+    }
+
+    nock('https://api.stormglass.io:443', {
+      encodedQueryParams: true,
+      reqheaders: {
+        Authorization: (): boolean => true
+      }
+    })
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/v2/weather/point')
+      .query({
+        lat: -33.792726,
+        lng: 151.289824,
+        params: /(.*)/,
+        source: 'noaa'
+      })
+      .reply(200, dataSendInRequest)
+
+    let requestTime = 1
+    while (requestTime < limitRate) {
+      await request.get('/forecast').set({ 'x-access-token': token })
+      requestTime++
+    }
+
+    const response = await request
+      .get('/forecast')
+      .set({ 'x-access-token': token })
+
+    expect(response.status).toBe(429)
+    expect(response.body).toEqual(expectedResponse)
   })
 })

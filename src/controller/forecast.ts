@@ -15,7 +15,7 @@ const requestsPerHour = requestLimitConfig.requestPerHour
 
 const limiter = rateLimit({
   windowMs: requestLimitConfig.windowMs,
-  max: requestsPerHour,
+  max: requestsPerHour + 1,
   keyGenerator: (req: Request) => req.ip,
   handler: (req: Request, res: Response): void => {
     logger.warn(
@@ -45,10 +45,12 @@ export class ForecastController extends BaseController {
       res.status(200).send(forecastData)
     } catch (error: any) {
       logger.error(error)
-      this.sendErrorResponse(res, {
-        code: 500,
-        message: 'Something went wrong!'
-      })
+      if (error.status !== 429) {
+        this.sendErrorResponse(res, {
+          code: 500,
+          message: 'Something went wrong!'
+        })
+      }
     }
   }
 }

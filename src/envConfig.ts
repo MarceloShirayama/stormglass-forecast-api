@@ -24,7 +24,7 @@ export const appConfig = {
 
 export const requestLimitConfig = {
   windowMs: 1 * 1000 * 60 * 60,
-  requestPerHour: 1
+  requestPerHour: 10
 }
 
 const apiToken = (
