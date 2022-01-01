@@ -33,18 +33,20 @@ process.on('uncaughtException', (error) => {
 
     // eslint-disable-next-line no-undef
     const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT']
-    exitSignals.map((signal) =>
-      process.on(signal, async () => {
+    for (const exitSignal of exitSignals) {
+      process.on(exitSignal, async () => {
         try {
           await server.close()
-          logger.info(`Server successfully closed with ${signal} signal`)
+          logger.info(
+            `Server successfully closed with ${exitSignal} exitSignal`
+          )
           process.exit(ExitStatus.Success)
         } catch (error: any) {
           logger.error(`Server close error: ${error.message}`)
           process.exit(ExitStatus.Failure)
         }
       })
-    )
+    }
   } catch (error: any) {
     logger.error(`App exited with error: ${error.message}`)
     process.exit(ExitStatus.Failure)
