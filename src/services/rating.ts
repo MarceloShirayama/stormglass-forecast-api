@@ -55,53 +55,25 @@ export class Rating {
   }
 
   public getRatingForSwellPeriod(period: number): number {
-    if (period <= 5) {
-      return 1
-    }
-    if (period > 5 && period <= 9) {
-      return 2
-    }
-    if (period > 9 && period <= 13) {
-      return 4
-    }
+    if (period <= 5) return 1
+    if (period <= 9) return 2
+    if (period <= 13) return 4
     return 5
   }
 
   public getRatingForSwellSize(height: number): number {
-    if (height < waveHeights.ankleToKnee.min) {
-      return 1
-    }
-    if (
-      height >= waveHeights.ankleToKnee.min &&
-      height <= waveHeights.ankleToKnee.max
-    ) {
-      return 2
-    }
-    if (
-      height >= waveHeights.kneeToWaist.min &&
-      height <= waveHeights.kneeToWaist.max
-    ) {
-      return 3
-    }
-    if (
-      height >= waveHeights.waistHigh.min &&
-      height <= waveHeights.waistHigh.max
-    ) {
-      return 4
-    }
+    if (height < waveHeights.ankleToKnee.min) return 1
+    if (height <= waveHeights.ankleToKnee.max) return 2
+    if (height <= waveHeights.kneeToWaist.max) return 3
+    if (height <= waveHeights.waistHigh.max) return 4
     return 5
   }
 
   public getPositionFromLocation(coordinates: number): GeoPosition {
-    if (coordinates >= 45 && coordinates <= 135) {
-      return GeoPosition.E
-    }
-    if (coordinates > 135 && coordinates < 225) {
-      return GeoPosition.S
-    }
-    if (coordinates >= 225 && coordinates <= 315) {
-      return GeoPosition.W
-    }
+    if (coordinates < 45) return GeoPosition.N
+    if (coordinates <= 135) return GeoPosition.E
+    if (coordinates <= 225) return GeoPosition.S
+    if (coordinates <= 315) return GeoPosition.W
     return GeoPosition.N
   }
 
