@@ -4,7 +4,7 @@ import logger from '@src/logger'
 import { Beach } from '@src/models/beach'
 import { Rating } from './rating'
 
-export type BeachForecast = Omit<Beach, 'user'> &
+export type BeachForecast = Omit<Beach, 'userId'> &
   ForecastPoint & {
     rating: number
   }

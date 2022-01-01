@@ -46,7 +46,7 @@ describe('Beaches Functional tests', () => {
         lng: 151.289824,
         name: 'Manly',
         position: GeoPosition.E,
-        user: userId
+        userId
       }
 
       const expectedResponse = await response
@@ -64,7 +64,7 @@ describe('Beaches Functional tests', () => {
         lng: 151.289824,
         name: 'Manly',
         position: GeoPosition.E,
-        user: userId
+        userId
       }
 
       const expectedResponse = await response.post('/beaches').send(newBeach)

@@ -6,7 +6,7 @@ const beachFake: Beach = {
   lng: 151.289824,
   name: 'Manly',
   position: GeoPosition.E,
-  user: 'fake-user-id'
+  userId: 'fake-user-id'
 }
 let defaultRating: Rating
 
