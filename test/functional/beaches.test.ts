@@ -4,7 +4,7 @@ import { SetupServer } from '@src/server'
 import AuthService from '@src/services/auth'
 import supertest from 'supertest'
 
-let response: supertest.SuperTest<supertest.Test>
+let request: supertest.SuperTest<supertest.Test>
 let server: SetupServer
 let userId: string
 
@@ -20,7 +20,7 @@ describe('Beaches Functional tests', () => {
   beforeAll(async () => {
     server = new SetupServer()
     await server.init()
-    response = supertest(server.getApp())
+    request = supertest(server.getApp())
   })
 
   beforeEach(async () => {
@@ -49,13 +49,13 @@ describe('Beaches Functional tests', () => {
         userId
       }
 
-      const expectedResponse = await response
+      const response = await request
         .post('/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach)
 
-      expect(expectedResponse.status).toBe(201)
-      expect(expectedResponse.body).toEqual(expect.objectContaining(newBeach))
+      expect(response.status).toBe(201)
+      expect(response.body).toEqual(expect.objectContaining(newBeach))
     })
 
     it('Should return a 400 when token is not provider', async () => {
@@ -67,10 +67,10 @@ describe('Beaches Functional tests', () => {
         userId
       }
 
-      const expectedResponse = await response.post('/beaches').send(newBeach)
+      const response = await request.post('/beaches').send(newBeach)
 
-      expect(expectedResponse.status).toBe(400)
-      expect(expectedResponse.body).toEqual({
+      expect(response.status).toBe(400)
+      expect(response.body).toEqual({
         message: `request.headers should have required property 'x-access-token'`,
         code: 400,
         error: 'Bad Request'
@@ -78,13 +78,39 @@ describe('Beaches Functional tests', () => {
     })
 
     it('Should return a 400 when beach is not provider', async () => {
-      const expectedResponse = await response.post('/beaches')
+      const response = await request.post('/beaches')
 
-      expect(expectedResponse.status).toBe(415)
-      expect(expectedResponse.body).toEqual({
+      expect(response.status).toBe(415)
+      expect(response.body).toEqual({
         message: 'unsupported media type undefined',
         code: 415,
         error: 'Unsupported Media Type'
+      })
+    })
+
+    it('should return 500 when there is any error other than validation error', async () => {
+      jest
+        .spyOn(Beach.prototype, 'save')
+        .mockImplementationOnce(() =>
+          Promise.reject(new Error('failed to create beach'))
+        )
+      const newBeach: Beach = {
+        lat: -33.792726,
+        lng: 151.289824,
+        name: 'Manly',
+        position: GeoPosition.E,
+        userId
+      }
+      const response = await request
+        .post('/beaches')
+        .set({ 'x-access-token': token })
+        .send(newBeach)
+
+      expect(response.status).toBe(500)
+      expect(response.body).toEqual({
+        code: 500,
+        error: 'Internal Server Error',
+        message: 'Something went wrong!'
       })
     })
   })
