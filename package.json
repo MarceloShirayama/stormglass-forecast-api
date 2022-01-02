@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "start": "NODE_ENV=production node -r dotenv/config ./dist/src/index.js",
     "dev": "NODE_ENV=development ts-node-dev -r dotenv/config --inspect=0.0.0.0:9222 --transpile-only --ignore-watch node_modules --respawn src/index.ts | pino-pretty -c",
-    "start": "npm run build && NODE_ENV=production node -r dotenv/config ./dist/src/index.js",
     "lint": "eslint ./src ./test --ext .ts,.js",
     "lint:fix": "eslint ./src ./test --ext .ts,.js --fix",
     "test": "npm run lint && npm run style:check && jest --runInBand && jest --projects ./test --runInBand",
@@ -17,6 +17,7 @@
     "style:check": "prettier --check './src/**/*.{ts,js}' './test/**/*.{ts,js}'",
     "style:fix": "prettier --write './src/**/*.{ts,js}' './test/**/*.{ts,js}'"
   },
+  "engines": { "node": ">=12" },
   "keywords": [],
   "author": "",
   "license": "ISC",
