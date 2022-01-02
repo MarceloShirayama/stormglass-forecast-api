@@ -13,7 +13,7 @@ enum environment {
 export const appConfig = {
   env: process.env.NODE_ENV,
   host:
-    process.env.NODE_ENV === environment.prod
+    process.env.NODE_ENV === process.env.HOST
       ? process.env.HOST
       : process.env.APP_HOST_LOCAL,
   port:
