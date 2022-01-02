@@ -8,10 +8,13 @@ const db = databaseConfig.db
 const user = databaseConfig.user
 const pass = databaseConfig.pass
 
+logger.info(appConfig.env)
+
 const uri =
   appConfig.env === 'prod'
     ? `mongodb+srv://${user}:${pass}@cluster0.gsoia.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
     : `mongodb://${user}:${pass}@${host}:${port}/${db}`
+logger.info(uri)
 
 const options = {
   autoIndex: true, // Build indexes
