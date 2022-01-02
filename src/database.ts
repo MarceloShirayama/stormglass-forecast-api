@@ -1,4 +1,4 @@
-import { databaseConfig } from '@src/envConfig'
+import { appConfig, databaseConfig } from '@src/envConfig'
 import mongoose from 'mongoose'
 import logger from './logger'
 
@@ -8,7 +8,10 @@ const db = databaseConfig.db
 const user = databaseConfig.user
 const pass = databaseConfig.pass
 
-const uri = `mongodb://${user}:${pass}@${host}:${port}/${db}`
+const uri =
+  appConfig.env === 'prod'
+    ? `mongodb+srv://${user}:${pass}@cluster0.gsoia.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+    : `mongodb://${user}:${pass}@${host}:${port}/${db}`
 
 const options = {
   autoIndex: true, // Build indexes

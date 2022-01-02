@@ -64,8 +64,14 @@ const db =
 export const databaseConfig = {
   host: process.env.MONGO_HOST,
   port: process.env.MONGO_PORT,
-  user: process.env.MONGO_USER,
-  pass: process.env.MONGO_PASSWORD,
+  user:
+    appConfig.env === environment.prod
+      ? process.env.MONGO_PASSWORD_MONGODB_USER
+      : process.env.MONGO_USER,
+  pass:
+    appConfig.env === environment.prod
+      ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
+      : process.env.MONGO_PASSWORD,
   db
 }
 
