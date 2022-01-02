@@ -66,7 +66,7 @@ export const databaseConfig = {
   port: process.env.MONGO_PORT,
   user:
     appConfig.env === environment.prod
-      ? process.env.MONGO_PASSWORD_MONGODB_USER
+      ? process.env.MONGO_MONGODB_ATLAS_USER
       : process.env.MONGO_USER,
   pass:
     appConfig.env === environment.prod
