@@ -13,13 +13,13 @@ enum environment {
 export const appConfig = {
   env: process.env.NODE_ENV,
   host:
-    process.env.NODE_ENV === environment.dev || environment.test
-      ? process.env.APP_HOST_LOCAL
-      : process.env.HOST,
+    process.env.NODE_ENV === environment.prod
+      ? process.env.HOST
+      : process.env.APP_HOST_LOCAL,
   port:
-    process.env.NODE_ENV === environment.dev || environment.test
-      ? Number(process.env.APP_PORT_LOCAL)
-      : Number(process.env.PORT)
+    process.env.NODE_ENV === environment.prod
+      ? Number(process.env.PORT)
+      : Number(process.env.APP_PORT_LOCAL)
 }
 
 const apiToken = (
