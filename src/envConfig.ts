@@ -60,15 +60,18 @@ const db =
     : appConfig.env === environment.dev
     ? process.env.DATABASE_DEV
     : process.env.MONGO_MONGODB_ATLAS_DATABASE
-const user =
+
+const user = (
   appConfig.env === environment.prod
     ? process.env.MONGO_MONGODB_ATLAS_USER
     : process.env.MONGO_USER
+) as string
 
-const pass =
+const pass = (
   appConfig.env === environment.prod
     ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
     : process.env.MONGO_PASSWORD
+) as string
 
 const mongoDbUrl = process.env.MONGO_MONGODB_URL as string
 export const databaseConfig = {
