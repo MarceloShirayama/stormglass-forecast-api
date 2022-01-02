@@ -59,7 +59,7 @@ const db =
     ? process.env.DATABASE_TEST
     : appConfig.env === environment.dev
     ? process.env.DATABASE_DEV
-    : process.env.MONGO_DATABASE
+    : process.env.MONGO_MONGODB_ATLAS_DATABASE
 
 export const databaseConfig = {
   host: process.env.MONGO_HOST,
