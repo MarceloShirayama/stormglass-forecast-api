@@ -2,18 +2,15 @@ import { appConfig, databaseConfig } from '@src/envConfig'
 import mongoose from 'mongoose'
 import logger from './logger'
 
-const host = databaseConfig.host
-const port = databaseConfig.port
+// const host = databaseConfig.host
+// const port = databaseConfig.port
 const db = databaseConfig.db
-const user = databaseConfig.user
-const pass = databaseConfig.pass
+// const user = databaseConfig.user
+// const pass = databaseConfig.pass
 
 logger.info(appConfig.env)
 
-const uri =
-  appConfig.env === 'prod'
-    ? databaseConfig.mongoDbUrl
-    : `mongodb://${user}:${pass}@${host}:${port}/${db}`
+const uri = databaseConfig.mongoDbUrl
 
 logger.info(uri)
 
