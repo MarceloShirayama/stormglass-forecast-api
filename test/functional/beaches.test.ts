@@ -26,7 +26,7 @@ describe('Beaches Functional tests', () => {
   beforeEach(async () => {
     const user = await new User(userFake).save()
     userId = user.id
-    token = AuthService.generateToken(user.toJSON())
+    token = AuthService.generateToken(userId)
   })
 
   afterEach(async () => {

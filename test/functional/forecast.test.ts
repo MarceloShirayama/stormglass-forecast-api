@@ -35,7 +35,7 @@ describe('Beach forecast functional tests', () => {
       userId: user.id
     }
     await new Beach(beachFake).save()
-    token = AuthService.generateToken(user.toJSON())
+    token = AuthService.generateToken(user.id)
   })
 
   afterEach(async () => {

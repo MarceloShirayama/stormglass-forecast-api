@@ -44,7 +44,7 @@ export class UsersController extends BaseController {
       })
     }
 
-    const token = AuthService.generateToken(user.toJSON())
+    const token = AuthService.generateToken(user.id)
 
     logger.info(`User ${user.email} authenticated`)
     return res.status(200).send({ token })
@@ -53,8 +53,8 @@ export class UsersController extends BaseController {
   @Get('me')
   @Middleware(authMiddleware)
   public async me(req: Request, res: Response): Promise<Response> {
-    const email = req.decoded ? req.decoded.email : undefined
-    const user = await User.findOne({ email })
+    const userId = req.context?.userId
+    const user = await User.findOne({ id: userId })
 
     if (!user) {
       return this.sendErrorResponse(res, {
@@ -62,6 +62,11 @@ export class UsersController extends BaseController {
         message: 'User not found!'
       })
     }
-    return res.status(200).send({ user })
+    const userProfile = {
+      name: user.name,
+      email: user.email
+    }
+
+    return res.status(200).send({ userProfile })
   }
 }

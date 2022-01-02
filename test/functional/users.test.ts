@@ -120,15 +120,14 @@ describe('Users functional tests', () => {
 
       newUser.password = await AuthService.hashPassword(newUser.password)
 
-      await new User(newUser).save()
+      const user = await new User(newUser).save()
 
       const response = await request
         .post('/users/authenticate')
         .send({ email: newUser.email, password: passBeforeHash })
+      const jwtClaims = AuthService.decodeToken(response.body.token)
 
-      expect(response.body).toEqual(
-        expect.objectContaining({ token: expect.any(String) })
-      )
+      expect(jwtClaims).toMatchObject({ sub: user.id })
     })
 
     it('Should return Unauthorized if incorrect user email', async () => {
@@ -179,24 +178,22 @@ describe('Users functional tests', () => {
       newUser.password = await AuthService.hashPassword(newUser.password)
 
       const user = await new User(newUser).save()
-      const token = AuthService.generateToken(user.toJSON())
+      const token = AuthService.generateToken(user.id)
+      const userProfile = {
+        name: newUser.name,
+        email: newUser.email
+      }
 
       const { body, status } = await request
         .get('/users/me')
         .set({ 'x-access-token': token })
 
       expect(status).toBe(200)
-      expect(body).toMatchObject(JSON.parse(JSON.stringify({ user })))
+      expect(body).toMatchObject(JSON.parse(JSON.stringify({ userProfile })))
     })
 
     it(`Should throw Not Found, when the user is not found`, async () => {
-      const userNotSaveInDB = {
-        name: 'invalid_user',
-        email: 'invalid_email@mail.com',
-        password: 'invalid_password',
-        id: 'invalid_id'
-      }
-      const token = AuthService.generateToken(userNotSaveInDB)
+      const token = AuthService.generateToken('invalid_user_id')
 
       const { body, status } = await request
         .get('/users/me')

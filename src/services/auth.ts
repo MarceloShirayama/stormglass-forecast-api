@@ -1,10 +1,9 @@
 import { authConfig } from '@src/envConfig'
-import { User } from '@src/models/user'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-export interface DecodeUser extends Omit<User, '_id'> {
-  id: string
+export interface JwtToken {
+  sub: string
 }
 
 export default class AuthService {
@@ -22,13 +21,13 @@ export default class AuthService {
     return await bcrypt.compare(password, hashedPassword)
   }
 
-  public static generateToken(payload: object): string {
-    return jwt.sign(payload, authConfig.secretKey, {
+  public static generateToken(sub: string): string {
+    return jwt.sign({ sub }, authConfig.secretKey, {
       expiresIn: authConfig.tokenExpiresIn
     })
   }
 
-  public static decodeToken(token: string): DecodeUser {
-    return jwt.verify(token, authConfig.secretKey) as DecodeUser
+  public static decodeToken(token: string): JwtToken {
+    return jwt.verify(token, authConfig.secretKey) as JwtToken
   }
 }
