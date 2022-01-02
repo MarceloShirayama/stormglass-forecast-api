@@ -70,12 +70,14 @@ const pass =
     ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
     : process.env.MONGO_PASSWORD
 
+const mongoDbUrl = process.env.MONGO_MONGODB_URL as string
 export const databaseConfig = {
   host: process.env.MONGO_HOST,
   port: process.env.MONGO_PORT,
   user,
   pass,
-  db
+  db,
+  mongoDbUrl
 }
 
 export const loggerConfig =

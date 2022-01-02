@@ -12,8 +12,9 @@ logger.info(appConfig.env)
 
 const uri =
   appConfig.env === 'prod'
-    ? `mongodb+srv://${user}:${pass}@cluster0.gsoia.mongodb.net/${db}?retryWrites=true&w=majority`
+    ? databaseConfig.mongoDbUrl
     : `mongodb://${user}:${pass}@${host}:${port}/${db}`
+
 logger.info(uri)
 
 const options = {
