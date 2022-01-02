@@ -60,18 +60,21 @@ const db =
     : appConfig.env === environment.dev
     ? process.env.DATABASE_DEV
     : process.env.MONGO_MONGODB_ATLAS_DATABASE
+const user =
+  appConfig.env === environment.prod
+    ? process.env.MONGO_MONGODB_ATLAS_USER
+    : process.env.MONGO_USER
+
+const pass =
+  appConfig.env === environment.prod
+    ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
+    : process.env.MONGO_PASSWORD
 
 export const databaseConfig = {
   host: process.env.MONGO_HOST,
   port: process.env.MONGO_PORT,
-  user:
-    appConfig.env === environment.prod
-      ? process.env.MONGO_MONGODB_ATLAS_USER
-      : process.env.MONGO_USER,
-  pass:
-    appConfig.env === environment.prod
-      ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
-      : process.env.MONGO_PASSWORD,
+  user,
+  pass,
   db
 }
 
