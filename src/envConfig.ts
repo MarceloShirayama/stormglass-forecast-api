@@ -16,16 +16,12 @@ export const appConfig = {
   port: process.env.PORT ? process.env.PORT : process.env.APP_PORT_LOCAL
 }
 
-const apiToken = (
-  process.env.NODE_ENV === environment.test
-    ? 'test_token'
-    : process.env.STORM_GLASS_API_KEY
-) as string
-
 export const apiConfig = {
   resources: {
     apiUrl: process.env.STORMGLASS_API_URL as string,
-    apiToken,
+    apiToken: (process.env.NODE_ENV === environment.test
+      ? 'test_token'
+      : process.env.STORM_GLASS_API_KEY) as string,
     endTimestampInDays: Number(
       process.env.STORM_GLASS_API_END_TIMESTAMP_IN_DAYS
     )
@@ -40,40 +36,19 @@ export const apiConfig = {
     (Number(process.env.STORM_GLASS_API_CACHE_TTL) * 60 * 60) | (24 * 60 * 60) // default 24 hours
 }
 
-const secretKey = process.env.AUTH_SECRET_KEY as string
-const tokenExpiresIn = process.env.TOKEN_EXPIRES_IN
-
 export const authConfig = {
-  secretKey,
-  tokenExpiresIn
+  secretKey: process.env.AUTH_SECRET_KEY as string,
+  tokenExpiresIn: process.env.TOKEN_EXPIRES_IN
 }
 
-const db = process.env.DATABASE
-  ? process.env.DATABASE
-  : process.env.NODE_ENV === environment.test
-  ? process.env.DATABASE_TEST
-  : process.env.DATABASE_DEV
-
-const user = (
-  appConfig.env === environment.prod
-    ? process.env.MONGO_MONGODB_ATLAS_USER
-    : process.env.MONGO_USER
-) as string
-
-const pass = (
-  appConfig.env === environment.prod
-    ? process.env.MONGO_PASSWORD_MONGODB_ATLAS
-    : process.env.MONGO_PASSWORD
-) as string
-
-const mongoDbUrl = process.env.MONGO_MONGODB_URL as string
 export const databaseConfig = {
-  host: process.env.MONGO_HOST,
-  port: process.env.MONGO_PORT,
-  user,
-  pass,
-  db,
-  mongoDbUrl
+  db:
+    appConfig.env === environment.test
+      ? process.env.DATABASE_TEST
+      : process.env.MONGO_DB,
+  mongoDbUrl: (process.env.MONGO_MONGODB_URL
+    ? process.env.MONGO_MONGODB_URL
+    : process.env.MONGO_MONGODB_URL_LOCAL) as string
 }
 
 export const loggerConfig =

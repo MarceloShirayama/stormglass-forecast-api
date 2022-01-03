@@ -1,20 +1,6 @@
-import { appConfig, databaseConfig } from '@src/envConfig'
+import { databaseConfig } from '@src/envConfig'
 import mongoose from 'mongoose'
 import logger from './logger'
-
-const host = databaseConfig.host
-const port = databaseConfig.port
-const db = databaseConfig.db
-const user = databaseConfig.user
-const pass = databaseConfig.pass
-
-logger.info(appConfig.env)
-
-const uri = databaseConfig.mongoDbUrl
-  ? databaseConfig.mongoDbUrl
-  : `mongodb://${user}:${pass}@${host}:${port}/${db}`
-
-logger.info(uri)
 
 const options = {
   autoIndex: true, // Build indexes
@@ -26,8 +12,8 @@ const options = {
 
 export const connect = async (): Promise<void> => {
   try {
-    await mongoose.connect(uri, options)
-    logger.info(`Database ${db} is connected`)
+    await mongoose.connect(databaseConfig.mongoDbUrl, options)
+    logger.info(`Database ${databaseConfig.db} is connected`)
   } catch (error: any) {
     logger.error(error.message)
   }
@@ -37,5 +23,5 @@ export const connect = async (): Promise<void> => {
 
 export const disconnect = async (): Promise<void> => {
   await mongoose.disconnect()
-  logger.info(`Database ${db} is disconnected`)
+  logger.info(`Database ${databaseConfig.db} is disconnected`)
 }
