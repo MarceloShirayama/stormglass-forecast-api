@@ -33,7 +33,8 @@ export const apiConfig = {
     requestPerHour: Number(process.env.REQUEST_LIMIT_PER_HOUR) | 10 // 10 requests per hour
   },
   cacheTTL:
-    (Number(process.env.STORM_GLASS_API_CACHE_TTL) * 60 * 60) | (24 * 60 * 60) // default 24 hours
+    (Number(process.env.STORM_GLASS_API_CACHE_TTL_IN_HOURS) * 60 * 60) |
+    (24 * 60 * 60) // default 24 hours
 }
 
 export const authConfig = {
