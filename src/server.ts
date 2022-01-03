@@ -16,11 +16,7 @@ import logger from './logger'
 import { apiErrorValidator } from './middlewares/api-error-validator'
 
 export class SetupServer extends Server {
-  constructor(
-    private port = appConfig.port,
-    private host = appConfig.host,
-    private env = appConfig.env
-  ) {
+  constructor(private port = appConfig.port, private env = appConfig.env) {
     super()
   }
 
@@ -84,7 +80,7 @@ export class SetupServer extends Server {
   public start(): void {
     this.app.listen(this.port, () => {
       logger.info(`Environment: ${this.env}`)
-      logger.info(`Server listening on http://${this.host}:${this.port}`)
+      logger.info(`Server listening on port ${this.port}`)
     })
   }
 }

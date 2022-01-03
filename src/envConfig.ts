@@ -12,14 +12,8 @@ enum environment {
 
 export const appConfig = {
   env: process.env.NODE_ENV,
-  host:
-    process.env.NODE_ENV === process.env.HOST
-      ? process.env.HOST
-      : process.env.APP_HOST_LOCAL,
-  port:
-    process.env.NODE_ENV === environment.prod
-      ? Number(process.env.PORT)
-      : Number(process.env.APP_PORT_LOCAL)
+  host: process.env.APP_HOST_LOCAL,
+  port: process.env.APP_PORT_LOCAL
 }
 
 const apiToken = (
@@ -54,12 +48,11 @@ export const authConfig = {
   tokenExpiresIn
 }
 
-const db =
-  appConfig.env === environment.test
-    ? process.env.DATABASE_TEST
-    : appConfig.env === environment.dev
-    ? process.env.DATABASE_DEV
-    : process.env.MONGO_MONGODB_ATLAS_DATABASE
+const db = process.env.DATABASE
+  ? process.env.DATABASE
+  : process.env.NODE_ENV === environment.test
+  ? process.env.DATABASE_TEST
+  : process.env.DATABASE_DEV
 
 const user = (
   appConfig.env === environment.prod
