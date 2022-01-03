@@ -41,14 +41,16 @@ export const authConfig = {
   tokenExpiresIn: Number(process.env.TOKEN_EXPIRES_IN_HOURS) * 1000 * 60 * 60
 }
 
+const db =
+  appConfig.env === environment.test
+    ? process.env.DATABASE_TEST
+    : process.env.MONGO_DB
+
 export const databaseConfig = {
-  db:
-    appConfig.env === environment.test
-      ? process.env.DATABASE_TEST
-      : process.env.MONGO_DB,
+  db,
   mongoDbUrl: (process.env.MONGO_MONGODB_URL
     ? process.env.MONGO_MONGODB_URL
-    : process.env.MONGO_MONGODB_URL_LOCAL) as string
+    : `${process.env.MONGO_MONGODB_URL_LOCAL}/${db}`) as string
 }
 
 export const loggerConfig =
