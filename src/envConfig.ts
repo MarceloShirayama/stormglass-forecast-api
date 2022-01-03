@@ -38,7 +38,7 @@ export const apiConfig = {
 
 export const authConfig = {
   secretKey: process.env.AUTH_SECRET_KEY as string,
-  tokenExpiresIn: process.env.TOKEN_EXPIRES_IN
+  tokenExpiresIn: Number(process.env.TOKEN_EXPIRES_IN_HOURS) * 1000 * 60 * 60
 }
 
 export const databaseConfig = {
