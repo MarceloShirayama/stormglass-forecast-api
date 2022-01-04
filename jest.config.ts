@@ -3,21 +3,18 @@
 // const root = resolve(__dirname)
 
 export default {
-  // rootDir: root,
-  displayName: 'root-tests',
-  bail: true,
   clearMocks: true,
   coverageProvider: 'v8',
   preset: 'ts-jest',
-  testEnvironment: 'node',
-  testMatch: ['<rootDir>/src/**/*.test.ts'],
+  testEnvironment: 'jest-environment-node',
   setupFiles: ['<rootDir>/src/envConfig.ts'],
-  // collectCoverage: true,
-  // collectCoverageFrom: ['<rootDir>/src/modules/**/useCases/**/*.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text-summary', 'lcov'],
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
     '@test/(.*)': '<rootDir>/test/$1'
-  }
+  },
+  watchPathIgnorePatterns: ['globalConfig']
 }
