@@ -1,27 +1,16 @@
 import { Beach, GeoPosition } from '@src/models/beach'
 import { User } from '@src/models/user'
-import { SetupServer } from '@src/server'
 import AuthService from '@src/services/auth'
-import supertest from 'supertest'
 
-let request: supertest.SuperTest<supertest.Test>
-let server: SetupServer
 let userId: string
 
 describe('Beaches Functional tests', () => {
-  // jest.setTimeout(150000)
   const userFake = {
     name: 'any_name',
     email: 'any_email@mail.com',
     password: 'any_password'
   }
   let token: string
-
-  beforeAll(async () => {
-    server = new SetupServer()
-    await server.init()
-    request = supertest(server.getApp())
-  })
 
   beforeEach(async () => {
     const user = await new User(userFake).save()
@@ -34,11 +23,6 @@ describe('Beaches Functional tests', () => {
     await User.deleteMany({})
   })
 
-  afterAll(async () => {
-    await server.close()
-    // await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000))
-  })
-
   describe('When creating a beach', () => {
     it('Should create a beach with success', async () => {
       const newBeach: Beach = {
@@ -49,7 +33,7 @@ describe('Beaches Functional tests', () => {
         userId
       }
 
-      const response = await request
+      const response = await global.testRequest
         .post('/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach)
@@ -67,7 +51,7 @@ describe('Beaches Functional tests', () => {
         userId
       }
 
-      const response = await request.post('/beaches').send(newBeach)
+      const response = await global.testRequest.post('/beaches').send(newBeach)
 
       expect(response.status).toBe(400)
       expect(response.body).toEqual({
@@ -78,7 +62,7 @@ describe('Beaches Functional tests', () => {
     })
 
     it('Should return a 400 when beach is not provider', async () => {
-      const response = await request.post('/beaches')
+      const response = await global.testRequest.post('/beaches')
 
       expect(response.status).toBe(415)
       expect(response.body).toEqual({
@@ -101,7 +85,7 @@ describe('Beaches Functional tests', () => {
         position: GeoPosition.E,
         userId
       }
-      const response = await request
+      const response = await global.testRequest
         .post('/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach)

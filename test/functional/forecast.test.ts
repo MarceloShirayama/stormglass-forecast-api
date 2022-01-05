@@ -1,6 +1,4 @@
-import supertest from 'supertest'
 import nock from 'nock'
-import { SetupServer } from '@src/server'
 import { Beach, GeoPosition } from '@src/models/beach'
 import { User } from '@src/models/user'
 import AuthService from '@src/services/auth'
@@ -9,8 +7,6 @@ import CacheUtil from '@src/util/cache'
 import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json'
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json'
 
-let request: supertest.SuperTest<supertest.Test>
-let server: SetupServer
 let token: string
 const userFake = {
   name: 'any_name',
@@ -19,13 +15,7 @@ const userFake = {
 }
 
 describe('Beach forecast functional tests', () => {
-  beforeAll(async () => {
-    server = new SetupServer()
-    await server.init()
-  })
-
   beforeEach(async () => {
-    request = supertest(server.getApp())
     const user = await new User(userFake).save()
     const beachFake: Beach = {
       lat: -33.792726,
@@ -42,10 +32,6 @@ describe('Beach forecast functional tests', () => {
     await Beach.deleteMany({})
     await User.deleteMany({})
     CacheUtil.clearAllCache()
-  })
-
-  afterAll(async () => {
-    await server.close()
   })
 
   it('Should return the forecast for the beaches', async () => {
@@ -69,7 +55,7 @@ describe('Beach forecast functional tests', () => {
       })
       .reply(200, dataSendInRequest)
 
-    const { body, status } = await request
+    const { body, status } = await global.testRequest
       .get('/forecast')
       .set({ 'x-access-token': token })
 
@@ -97,7 +83,7 @@ describe('Beach forecast functional tests', () => {
       })
       .reply(200, dataSendInRequest)
 
-    const requestResponse = await request
+    const requestResponse = await global.testRequest
       .get('/forecast')
       .set({ 'x-access-token': token })
 
@@ -132,11 +118,11 @@ describe('Beach forecast functional tests', () => {
 
     let requestTime = 1
     while (requestTime < limitRate) {
-      await request.get('/forecast').set({ 'x-access-token': token })
+      await global.testRequest.get('/forecast').set({ 'x-access-token': token })
       requestTime++
     }
 
-    const response = await request
+    const response = await global.testRequest
       .get('/forecast')
       .set({ 'x-access-token': token })
 

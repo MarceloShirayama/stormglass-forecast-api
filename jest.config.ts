@@ -16,5 +16,6 @@ export default {
     '@src/(.*)': '<rootDir>/src/$1',
     '@test/(.*)': '<rootDir>/test/$1'
   },
-  watchPathIgnorePatterns: ['globalConfig']
+  watchPathIgnorePatterns: ['globalConfig'],
+  setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts']
 }

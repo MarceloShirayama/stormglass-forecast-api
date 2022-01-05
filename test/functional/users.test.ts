@@ -1,22 +1,7 @@
 import { User } from '@src/models/user'
-import { SetupServer } from '@src/server'
 import AuthService from '@src/services/auth'
-import supertest from 'supertest'
-
-let request: supertest.SuperTest<supertest.Test>
-let server: SetupServer
 
 describe('Users functional tests', () => {
-  beforeAll(async () => {
-    server = new SetupServer()
-    await server.init()
-    request = supertest(server.getApp())
-  })
-
-  afterAll(async () => {
-    await server.close()
-  })
-
   afterEach(async () => {
     await User.deleteMany({})
   })
@@ -29,7 +14,7 @@ describe('Users functional tests', () => {
         password: 'any_password'
       }
 
-      const response = await request.post('/users').send(newUser)
+      const response = await global.testRequest.post('/users').send(newUser)
 
       expect(response.status).toBe(201)
       await expect(
@@ -49,7 +34,7 @@ describe('Users functional tests', () => {
         password: '12345'
       }
 
-      let response = await request.post('/users').send(newUser)
+      let response = await global.testRequest.post('/users').send(newUser)
 
       expect(response.status).toBe(400)
       expect(response.body).toEqual({
@@ -63,7 +48,7 @@ describe('Users functional tests', () => {
         password: '12345'
       }
 
-      response = await request.post('/users').send(newUser2)
+      response = await global.testRequest.post('/users').send(newUser2)
 
       expect(response.status).toBe(400)
       expect(response.body).toEqual({
@@ -77,7 +62,7 @@ describe('Users functional tests', () => {
         email: 'any_email@mail.com'
       }
 
-      response = await request.post('/users').send(newUser3)
+      response = await global.testRequest.post('/users').send(newUser3)
 
       expect(response.status).toBe(400)
       expect(response.body).toEqual({
@@ -95,9 +80,9 @@ describe('Users functional tests', () => {
         password: 'any_password'
       }
 
-      await request.post('/users').send(newUser)
+      await global.testRequest.post('/users').send(newUser)
 
-      const response = await request.post('/users').send(newUser)
+      const response = await global.testRequest.post('/users').send(newUser)
 
       expect(response.status).toBe(409)
       expect(response.body).toEqual({
@@ -122,7 +107,7 @@ describe('Users functional tests', () => {
 
       const user = await new User(newUser).save()
 
-      const response = await request
+      const response = await global.testRequest
         .post('/users/authenticate')
         .send({ email: newUser.email, password: passBeforeHash })
       const jwtClaims = AuthService.decodeToken(response.body.token)
@@ -131,7 +116,7 @@ describe('Users functional tests', () => {
     })
 
     it('Should return Unauthorized if incorrect user email', async () => {
-      const response = await request
+      const response = await global.testRequest
         .post('/users/authenticate')
         .send({ email: 'invalid_email@mail.com', password: 'any_password' })
 
@@ -154,7 +139,7 @@ describe('Users functional tests', () => {
 
       await new User(newUser).save()
 
-      const response = await request
+      const response = await global.testRequest
         .post('/users/authenticate')
         .send({ email: newUser.email, password: 'invalid_password' })
 
@@ -184,7 +169,7 @@ describe('Users functional tests', () => {
         email: newUser.email
       }
 
-      const { body, status } = await request
+      const { body, status } = await global.testRequest
         .get('/users/me')
         .set({ 'x-access-token': token })
 
@@ -195,7 +180,7 @@ describe('Users functional tests', () => {
     it(`Should throw Not Found, when the user is not found`, async () => {
       const token = AuthService.generateToken('invalid_user_id')
 
-      const { body, status } = await request
+      const { body, status } = await global.testRequest
         .get('/users/me')
         .set({ 'x-access-token': token })
 
