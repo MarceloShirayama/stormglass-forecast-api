@@ -22,19 +22,16 @@ export const apiConfig = {
     apiToken: (process.env.NODE_ENV === environment.test
       ? 'test_token'
       : process.env.STORM_GLASS_API_KEY) as string,
-    endTimestampInDays: Number(
-      process.env.STORM_GLASS_API_END_TIMESTAMP_IN_DAYS
-    )
+    endTimestampInDays: Number(process.env.API_END_TIMESTAMP_IN_DAYS)
   },
   requestLimit: {
     windowMs:
-      (Number(process.env.FORECAST_REQUEST_WINDOW_HOUR) * 1000 * 60 * 60) |
+      (Number(process.env.REQUEST_WINDOW_HOUR) * 1000 * 60 * 60) |
       (1 * 1000 * 60 * 60), // 1 hour
     requestPerHour: Number(process.env.REQUEST_LIMIT_PER_HOUR) | 10 // 10 requests per hour
   },
   cacheTTL:
-    (Number(process.env.STORM_GLASS_API_CACHE_TTL_IN_HOURS) * 60 * 60) |
-    (24 * 60 * 60) // default 24 hours
+    (Number(process.env.API_CACHE_TTL_IN_HOURS) * 60 * 60) | (24 * 60 * 60) // default 24 hours
 }
 
 export const authConfig = {
